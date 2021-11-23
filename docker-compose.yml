@@ -27,5 +27,5 @@ services:
       - barunalim
 networks:
   barunalim:
-  driver: bridge
+    driver: bridge
 
