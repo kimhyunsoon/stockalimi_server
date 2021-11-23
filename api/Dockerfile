@@ -4,7 +4,7 @@ FROM node:16.13
 WORKDIR /api
 
 # 앱 의존성 설치
-COPY package*.json ./
+COPY package.json ./
 RUN npm install
 
 # 앱 소스 추가
