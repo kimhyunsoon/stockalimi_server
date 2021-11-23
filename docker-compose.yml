@@ -6,7 +6,8 @@ services:
       - "80:80"
     volumes:
       - ./proxy/nginx.conf:/etc/proxy/nginx.conf
-
+    networks:
+      - backend
   api:
     image: "node:16.13"
     ports:
@@ -15,12 +16,17 @@ services:
     volumes:
       - ./api:/api
       - /api/node_modules
-
+    networks:
+      - backend
   db:
     image: "mysql:8"
     ports:
       - "3306:3306"
     volumes:
       - ./mysql/db/mysql:/var/lib/mysql
-
+    networks:
+      - backend
+networks:
+  backend:
+    driver: bridge
 
