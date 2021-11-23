@@ -7,7 +7,7 @@ services:
     volumes:
       - ./proxy/nginx.conf:/etc/proxy/nginx.conf
     networks:
-      - barunalim
+      - backend
   api:
     image: "node:16.13"
     ports:
@@ -17,7 +17,7 @@ services:
       - ./api:/api
       - /api/node_modules
     networks:
-      - barunalim
+      - backend
   db:
     image: "mysql:8"
     ports:
@@ -25,8 +25,8 @@ services:
     volumes:
       - ./mysql/db/mysql:/var/lib/mysql
     networks:
-      - barunalim
+      - backend
 networks:
-  barunalim:
+  backend:
     driver: bridge
 
