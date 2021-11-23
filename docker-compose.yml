@@ -11,8 +11,7 @@ services:
   api:
     image: "node:16.13"
     ports:
-      - "4000"
-      - "4001:4001"
+      - "4000:4000"
     volumes:
       - ./api:/api
       - /api/node_modules
@@ -22,11 +21,12 @@ services:
     image: "mysql:8"
     ports:
       - "3306:3306"
+    env_file:
+      - ./db/db.env
     volumes:
       - ./data:/var/lib/mysql
     networks:
       - backend
-    env_file:
-      - ./db/db.env
+    
 networks:
   backend:
