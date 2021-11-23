@@ -11,7 +11,7 @@ services:
   api:
     image: "barunalim_api:0.1"
     ports:
-      - "4040:4040"
+      - "4040"
     volumes:
       - /home/master/api:/api
       - /api/node_modules
