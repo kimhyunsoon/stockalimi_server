@@ -11,7 +11,7 @@ RUN npm install
 # 앱 소스 추가
 COPY . ./
 
-# RUN npm install -g nodemon
+RUN npm install -g nodemon
 
-# CMD [ "nodemon", "-L", "server.js" ]
-CMD [ "sleep", "100" ]
+CMD [ "nodemon", "-L", "server.js" ]
+# CMD [ "sleep", "100" ]
