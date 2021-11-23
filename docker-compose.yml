@@ -25,4 +25,7 @@ services:
       - ./mysql/db/mysql:/var/lib/mysql
     networks:
       - barunalim
+networks:
+  barunalim:
+  driver: bridge
 
