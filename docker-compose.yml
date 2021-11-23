@@ -28,5 +28,6 @@ services:
       - backend
 networks:
   backend:
-    driver: bridge
+    external: 
+      name: backend
 
