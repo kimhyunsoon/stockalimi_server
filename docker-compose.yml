@@ -5,24 +5,18 @@ services:
     ports:
       - "80:80"
     volumes:
-      - ./proxy/nginx.conf:/etc/proxy/nginx.conf
-    restart: "unless-stopped"
-    container_name: proxy
+      - /home/master/proxy/nginx.conf:/etc/proxy/nginx.conf
     networks:
       - backend
   api:
     image: "node:16.13"
-    build:
-      context: ./api
-    expose:
-      - "4000"
+    build: /home/master/api
+    command: npm start
     ports:
       - "4000:4000"
     volumes:
-      - ./api:/api
+      - /home/master/api:/api
       - /api/node_modules
-    restart: "unless-stopped"
-    container_name: api
     networks:
       - backend
   db:
@@ -30,11 +24,9 @@ services:
     ports:
       - "3306:3306"
     env_file:
-      - ./db/db.env
+      - /home/master/db/db.env
     volumes:
-      - ./data:/var/lib/mysql
-    restart: "unless-stopped"
-    container_name: db
+      - /home/master/data:/var/lib/mysql
     networks:
       - backend
     

@@ -9,7 +9,7 @@ WORKDIR /api
 COPY . .
 
 RUN npm install
-RUN npm install -g nodemon
+# RUN npm install -g nodemon
 
-CMD [ "nodemon", "-L", "server.js" ]
-# CMD [ "sleep", "100" ]
+# CMD [ "nodemon", "-L", "server.js" ]
+CMD [ "sleep", "100" ]
