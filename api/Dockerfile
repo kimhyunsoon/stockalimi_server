@@ -15,3 +15,4 @@ RUN npm install -g nodemon
 
 CMD [ "nodemon", "-L", "server.js" ]
 # CMD [ "sleep", "100" ]
+EXPOSE 4040
