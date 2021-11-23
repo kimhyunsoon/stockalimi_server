@@ -26,5 +26,7 @@ services:
       - ./mysql/db/mysql:/var/lib/mysql
     networks:
       - backend
+    env_file:
+      - ./db/db.env
 networks:
   backend:
