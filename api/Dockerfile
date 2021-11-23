@@ -1,7 +1,7 @@
 FROM node:16.13
 
 # 앱 디렉터리 생성
-WORKDIR /usr/src/app
+WORKDIR /api
 
 # 앱 의존성 설치
 COPY package*.json ./
@@ -15,3 +15,4 @@ COPY . .
 EXPOSE 4000
 
 CMD [ "nodemon", "-L", "server.js" ]
+# CMD [ "sleep", "100" ]

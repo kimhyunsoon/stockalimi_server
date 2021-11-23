@@ -23,7 +23,7 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - ./mysql/db/mysql:/var/lib/mysql
+      - ./data:/var/lib/mysql
     networks:
       - backend
     env_file:
