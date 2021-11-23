@@ -4,14 +4,13 @@ FROM node:16.13
 WORKDIR /api
 
 # 앱 의존성 설치
-RUN npm init
 COPY package*.json ./
 RUN npm install
 
 # 앱 소스 추가
 COPY . ./
 
-RUN npm install -g nodemon
+# RUN npm install -g nodemon
 
 CMD [ "nodemon", "-L", "server.js" ]
 # CMD [ "sleep", "100" ]
