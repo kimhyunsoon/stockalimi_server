@@ -16,7 +16,7 @@ services:
     networks:
       - backend
   db:
-    image: "mysql:8"
+    image: "mariadb:10.4"
     ports:
       - "3306:3306"
     env_file:
