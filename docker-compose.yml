@@ -5,13 +5,11 @@ services:
     ports:
       - "80:80"
     volumes:
-      - /home/master/proxy/nginx.conf:/etc/proxy/nginx.conf
+      - /home/master/proxy/nginx.conf:/etc/nginx/nginx.conf
     networks:
       - backend
   api:
-    image: "barunalim_api:0.1"
-    ports:
-      - "4040"
+    image: "barunalim_api:0.1" 
     volumes:
       - /home/master/api:/api
       - /api/node_modules
