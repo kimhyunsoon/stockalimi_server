@@ -13,5 +13,3 @@ COPY . .
 RUN npm install -g nodemon
 
 CMD [ "nodemon", "-L", "server.js" ]
-
-EXPOSE 4040
