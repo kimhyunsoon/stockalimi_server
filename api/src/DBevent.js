@@ -3,6 +3,9 @@ const mariadb = require('mariadb');
 
 const DBinfo = require('./DBinfo.js');
 
+const log = require("./Tale.js").log;
+const err = require("./Tale.js").err;
+
 const pool = mariadb.createPool({
   host: DBinfo.barunalim.host, 
   port:DBinfo.barunalim.port,
@@ -12,8 +15,6 @@ const pool = mariadb.createPool({
   connectionLimit: 5
 });
 
-let nowDate = moment(new Date()).format("YYYY-MM-DD, HH:mm:ss");
-const errTag = '=============== DB에러 '+nowDate+' ===============';
 
 //전화번호 중복체크
 const DuplicatePhoneNumberCheck = async number => {
@@ -25,9 +26,8 @@ const DuplicatePhoneNumberCheck = async number => {
     );
     return await res[0].cnt == 0; // 있으면 fale, 없으면 true 반환
   } catch (err) {
-    console.log(errTag);
+    err('DBevent : 전화번호 중복확인');
     console.log(err);
-    console.log(errTag);
     return await false; // 실패시 false
   } finally {
     if (conn) conn.release();
@@ -47,10 +47,8 @@ const CreateUser = async user => {
       );
       return await true; //성공시 true
     } catch (err) {
-      console.log(errTag);
       console.log(err);
-      console.log(errTag);
-  
+      err('DBevent : joinUser');
       return await false; // 실패시 false
     } finally {
       if (conn) conn.release();
