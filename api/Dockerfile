@@ -11,5 +11,8 @@ RUN npm install
 COPY . .
 
 RUN npm install -g nodemon
+RUN npm i
 
 CMD [ "nodemon", "-L", "server.js" ]
+
+EXPOSE 4021
