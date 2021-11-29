@@ -36,7 +36,7 @@ app.post('/joinUser', async (req, res) => {
 app.post('/phoneNumberCheck', async (req, res)=>{
   let phone = req.body.phone;
   let r = await DBevent.DuplicatePhoneNumberCheck(phone)
-  res.send(r); //있으면 true 실패시 false 반환
+  res.send(r); //없으면 true 실패시 false 반환
 })
 
 app.get('/getStockInfo', (req, res) =>{

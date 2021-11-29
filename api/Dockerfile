@@ -5,13 +5,13 @@ WORKDIR /api
 
 # 앱 의존성 설치
 COPY package*.json ./
-RUN npm install
+
 
 # 앱 소스 추가
 COPY . .
 
+RUN npm install
 RUN npm install -g nodemon
-RUN npm i
 
 CMD [ "nodemon", "-L", "server.js" ]
 

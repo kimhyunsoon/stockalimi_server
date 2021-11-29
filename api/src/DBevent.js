@@ -24,6 +24,11 @@ const DuplicatePhoneNumberCheck = async number => {
     const res = await conn.query(
       "SELECT COUNT(*) as cnt FROM user_information WHERE phone='" + number + "'"
     );
+    if (res[0].cnt == 0){
+      log(number + ", 등록되어있지않음")
+    } else {
+      log(number + ", 등록되어있음")
+    }
     return await res[0].cnt == 0; // 있으면 fale, 없으면 true 반환
   } catch (err) {
     err('DBevent : 전화번호 중복확인');
@@ -45,6 +50,7 @@ const CreateUser = async user => {
       const res = await conn.query(
         "INSERT INTO user_information VALUE('"+user.name+"', '"+user.phone+"', NOW())"
       );
+      log(user.name+', '+user.phone+' 등록완료');
       return await true; //성공시 true
     } catch (err) {
       console.log(err);
