@@ -1,6 +1,6 @@
 module.exports = {
   barunalim : {
-    host : 'barunalim_db',
+    host : 'db',
     port: '3306',
     user: 'master',
     password: 'qkfmsgks0',
