@@ -30,9 +30,9 @@ const DuplicatePhoneNumberCheck = async number => {
       log(number + ", 등록되어있음")
     }
     return await res[0].cnt == 0; // 있으면 fale, 없으면 true 반환
-  } catch (err) {
+  } catch (e) {
     err('DBevent : 전화번호 중복확인');
-    console.log(err);
+    console.log(e);
     return await false; // 실패시 false
   } finally {
     if (conn) conn.release();
@@ -49,8 +49,8 @@ const CreateUser = async user => {
     );
     log(user.name+', '+user.phone+' 등록완료');
     return await true; //성공시 true
-  } catch (err) {
-    console.log(err);
+  } catch (e) {
+    console.log(e);
     err('DBevent : joinUser');
     return await false; // 실패시 false
   } finally {
