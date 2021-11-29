@@ -15,4 +15,4 @@ RUN npm i
 
 CMD [ "nodemon", "-L", "server.js" ]
 
-EXPOSE 4021
+EXPOSE 4040

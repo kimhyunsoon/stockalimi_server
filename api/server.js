@@ -1,7 +1,7 @@
 'use strict'; // 엄격
 
 const express = require('express');
-const PORT = 4021;
+const PORT = 4040;
 //const HOST = '0.0.0.0';
 const app = express();
 
