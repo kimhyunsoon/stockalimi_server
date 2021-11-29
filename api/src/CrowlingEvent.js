@@ -25,9 +25,9 @@ const kosCrawFunc = (dataArr, name) => {
         let $ = res.$;
         dataArr['graph'] = $('#chart_0 .graph img').attr('src');
         dataArr['price'] = $('#quotient #now_value').text();
-        dataArr['daytodayType'] = $('#quotient #change_value_and_rate span').text();
-        dataArr['daytodayPrice'] = $('#quotient #change_value_and_rate').text();
-        dataArr['daytodayPer'] = $('#quotient #change_value_and_rate span').text();
+        dataArr['daytodayType'] = $('.subtop_sise_detail #quotient').hasClass('dn')?'하락':'상승';
+        dataArr['daytodayPrice'] = $('#quotient #change_value_and_rate span').text().replaceAll('상승', '').replaceAll('하락', '').trim();
+        dataArr['daytodayPer'] = $('#quotient #change_value_and_rate').text().replaceAll('상승', '').replaceAll('하락', '').trim().substring(5,100);
         log('크롤링 완료 : ' + name);
       }
       done();
@@ -76,6 +76,7 @@ const getStockData = () =>{
   //코스닥
   kosCrawFunc(totalData.kosdaqData, 'kosdaq').queue('https://finance.naver.com/sise/sise_index.naver?code=KOSDAQ');
 }
+getStockData();
 
 //월~금 9시~3시40분 20분마다 크롤링
 const j = schedule.scheduleJob('0,20,40 9-15 * * 1-5', () => {
