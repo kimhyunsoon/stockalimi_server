@@ -23,6 +23,7 @@ services:
       - /home/master/db/db.env
     volumes:
       - /home/master/data:/var/lib/mysql
+      - /home/master/db/custom.conf:/etc/mysql/conf.d/custom.cnf
     networks:
       - backend
     
