@@ -41,24 +41,20 @@ const DuplicatePhoneNumberCheck = async number => {
 
 //사용자 정보 저장
 const CreateUser = async user => {
-  if(!user.name || user.phone){
-    return false; // 필수값이 없을경우 false
-  } else {
-    let conn;
-    try {
-      conn = await pool.getConnection();
-      const res = await conn.query(
-        "INSERT INTO user_information VALUE('"+user.name+"', '"+user.phone+"', NOW())"
-      );
-      log(user.name+', '+user.phone+' 등록완료');
-      return await true; //성공시 true
-    } catch (err) {
-      console.log(err);
-      err('DBevent : joinUser');
-      return await false; // 실패시 false
-    } finally {
-      if (conn) conn.release();
-    }
+  let conn;
+  try {
+    conn = await pool.getConnection();
+    const res = await conn.query(
+      "INSERT INTO user_information VALUE('"+user.name+"', '"+user.phone+"', NOW())"
+    );
+    log(user.name+', '+user.phone+' 등록완료');
+    return await true; //성공시 true
+  } catch (err) {
+    console.log(err);
+    err('DBevent : joinUser');
+    return await false; // 실패시 false
+  } finally {
+    if (conn) conn.release();
   }
 }
 
