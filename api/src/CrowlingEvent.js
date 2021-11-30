@@ -78,8 +78,8 @@ const getStockData = () =>{
 }
 getStockData();
 
-//월~금 9시~3시40분 20분마다 크롤링
-const j = schedule.scheduleJob('0,20,40 9-15 * * 1-5', () => {
+//월~금 9시~16시3분 3분마다 크롤링
+const j = schedule.scheduleJob('*/3 9-16 * * 1-5', () => {
   getStockData();
 })
 
