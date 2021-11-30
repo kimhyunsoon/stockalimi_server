@@ -6,12 +6,12 @@ const PORT = 4040;
 const app = express();
 
 //cors
-// const cors = require('cors');
+const cors = require('cors');
 // let corsOption = {
 //   origin: 'http://139.150.73.190:80',
 //   credential: true,
 // }
-// app.use(cors(corsOption));
+app.use(cors());
 
 //json
 app.use(express.json());
