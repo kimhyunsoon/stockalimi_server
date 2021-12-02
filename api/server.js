@@ -61,7 +61,7 @@ app.post('/joinUser', async (req, res) => {
 
   //사용자 정보 저장은 클라이언트 앱 토큰 검증 후 처리함
   admin.messaging().send(tokenCheck)
-    .then(r => { //토큰으로 푸쉬알림 발송시도가 성공하면 (앱에서 수신하지는 않음)
+    .then(result => { //토큰으로 푸쉬알림 발송시도가 성공하면 (앱에서 수신하지는 않음)
       let r = await DBevent.CreateUser(req.body);
       res.send(r); //성공시 true 실패시 false 반환
     })
