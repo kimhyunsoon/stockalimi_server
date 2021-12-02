@@ -68,20 +68,20 @@ const listCrawFunc = () => {
 }
 
 //크롤링
-const getStockData = () =>{
-  //거래순위 1~10
-  listCrawFunc().queue('https://finance.naver.com/sise/sise_quant.naver')
-  //코스피
-  kosCrawFunc(totalData.kospiData, 'kospi').queue('https://finance.naver.com/sise/sise_index.naver?code=KOSPI');
-  //코스닥
-  kosCrawFunc(totalData.kosdaqData, 'kosdaq').queue('https://finance.naver.com/sise/sise_index.naver?code=KOSDAQ');
-}
-getStockData();
+// const getStockData = () =>{
+//   //거래순위 1~10
+//   listCrawFunc().queue('https://finance.naver.com/sise/sise_quant.naver')
+//   //코스피
+//   kosCrawFunc(totalData.kospiData, 'kospi').queue('https://finance.naver.com/sise/sise_index.naver?code=KOSPI');
+//   //코스닥
+//   kosCrawFunc(totalData.kosdaqData, 'kosdaq').queue('https://finance.naver.com/sise/sise_index.naver?code=KOSDAQ');
+// }
+// getStockData();
 
-//월~금 9시~16시3분 3분마다 크롤링
-const j = schedule.scheduleJob('*/3 9-16 * * 1-5', () => {
-  getStockData();
-})
+// //월~금 9시~17시 3분마다 크롤링
+// const j = schedule.scheduleJob('*/3 9-16 * * 1-5', () => {
+//   getStockData();
+// })
 
 module.exports = {
   totalData : totalData,
