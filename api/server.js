@@ -36,12 +36,6 @@ admin.initializeApp({
   credential: admin.credential.cert(serAccount),
 })
 
-const registrationToken = "c4PiV5YZTdaSKlJqbHGOKE:APA91bEd9XHtfqJ6PHcLBpp5uzgo5CYY5Nlr8km7bN9dnwcH2IogHKx-D3rMkhk1s2A4Rg1yoreLxD_Mny6Ql6y7nSE4lfjV1ELF2Vjy9dhaybSBDIy72Rxwv9Z3U7kAWVklZD_ltCdi";
-
-
-
-
-
 let message = {
   notification: {
     title: 'wtet',
@@ -62,7 +56,7 @@ app.post('/joinUser', async (req, res) => {
   //사용자 정보 저장은 클라이언트 앱 토큰 검증 후 처리함
   admin.messaging().send(tokenCheck)
     .then(result => { //토큰으로 푸쉬알림 발송시도가 성공하면 (앱에서 수신하지는 않음)
-      let r = await DBevent.CreateUser(req.body);
+      let r = DBevent.CreateUser(req.body);
       res.send(r); //성공시 true 실패시 false 반환
     })
     .catch(e => {
