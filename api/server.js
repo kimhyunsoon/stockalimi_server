@@ -56,6 +56,7 @@ app.get('/pushTest', (req, res) =>{
 //사용자 정보 저장
 app.post('/joinUser', async (req, res) => {
   log('post : /joinUser');
+  console.log(req.headers);
   const tokenCheck = {
     data: {
       message: "check" //푸쉬할 메시지
