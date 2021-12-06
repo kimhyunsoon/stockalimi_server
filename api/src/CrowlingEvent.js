@@ -28,7 +28,7 @@ const kosCrawFunc = (dataArr, name) => {
         dataArr['daytodayType'] = $('.subtop_sise_detail #quotient').hasClass('dn')?'하락':'상승';
         dataArr['daytodayPrice'] = $('#quotient #change_value_and_rate span').text().replaceAll('상승', '').replaceAll('하락', '').trim();
         dataArr['daytodayPer'] = $('#quotient #change_value_and_rate').text().replaceAll('상승', '').replaceAll('하락', '').trim().substring(5,100);
-        log('크롤링 완료 : ' + name);
+        log('크롤링 성공 : ' + name);
       }
       done();
     }

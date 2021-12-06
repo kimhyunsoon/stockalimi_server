@@ -55,6 +55,7 @@ app.get('/pushTest', (req, res) =>{
 
 //사용자 정보 저장
 app.post('/joinUser', async (req, res) => {
+  log('post : /joinUser');
   const tokenCheck = {
     data: {
       message: "check" //푸쉬할 메시지
@@ -76,6 +77,7 @@ app.post('/joinUser', async (req, res) => {
 
 //전화번호 중복체크
 app.post('/phoneNumberCheck', async (req, res)=>{
+  log('post : /phoneNumberCheck');
   let phone = req.body.phone;
   let r = await DBevent.DuplicatePhoneNumberCheck(phone)
   res.send(r); //없으면 true 있으면 false, 에러시 'err' 반환
@@ -84,6 +86,7 @@ app.post('/phoneNumberCheck', async (req, res)=>{
 
 //크롤링 데이터 요청
 app.get('/getStockInfo', (req, res) =>{
+  log('get : /getStockInfo');
   //크롤링 데이터 요청의 경우는 간단히 앱-서버 간 약속된 문자열 확인 후 처리함
   if (req.headers.appinformation == 'barunStockPushApp') {
     res.send(CrowlingEvent.totalData)
