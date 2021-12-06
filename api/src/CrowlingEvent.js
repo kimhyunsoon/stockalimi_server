@@ -20,7 +20,7 @@ const kosCrawFunc = (dataArr, name) => {
     callback : function (error, res, done) {
       if(error){
         err('크롤링 실패 : ' + name);
-          return false;
+        return false;
       }else{
         let $ = res.$;
         dataArr['graph'] = $('#chart_0 .graph img').attr('src');
