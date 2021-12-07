@@ -40,7 +40,7 @@ let message = {
 
 // 푸쉬알림 테스트용
 app.get('/pushTest', (req, res) =>{
-  admin.messaging().sendToTopic('test', message)
+  admin.messaging().sendToTopic('stockTopic', message)
   .then(r => {
     console.log("Successfully sent message:", r);
     res.send("Successfully sent message:");
