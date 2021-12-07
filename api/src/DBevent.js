@@ -58,7 +58,27 @@ const CreateUser = async user => {
   }
 }
 
+//사용자 정보 업데이트
+const UpdateUser = async user => {
+  let conn;
+  try {
+    conn = await pool.getConnection();
+    const res = await conn.query(
+      "UPDATE user_information SET name='"+user.name+"', phone='"+user.phone+"', join_date=NOW() WHERE phone='"+user.phone+"'"
+    );
+    log(user.name+', '+user.phone+' 등록완료');
+    return await true; //성공시 true
+  } catch (e) {
+    console.log(e);
+    err('DBevent : joinUser');
+    return await 'err'; // 실패시 'err'
+  } finally {
+    if (conn) conn.release();
+  }
+}
+
 module.exports = {
   DuplicatePhoneNumberCheck : DuplicatePhoneNumberCheck,
   CreateUser : CreateUser,
+  UpdateUser : UpdateUser,
 }

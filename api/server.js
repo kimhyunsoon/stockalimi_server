@@ -75,6 +75,28 @@ app.post('/joinUser', async (req, res) => {
   
 })
 
+//사용자 정보 업데이트
+app.post('/updateUser', async (req, res) => {
+  log('post : /updateUser');
+  const tokenCheck = {
+    data: {
+      message: "check" //푸쉬할 메시지
+    },
+    token: req.headers.apptoken,
+  };
+
+  //사용자 정보 저장은 클라이언트 앱 토큰 검증 후 처리함
+  admin.messaging().send(tokenCheck)
+    .then(result => { //토큰으로 푸쉬알림 발송시도가 성공하면 (앱에서 수신하지는 않음)
+      let r = DBevent.UpdateUser(req.body);
+      res.send(r); //성공시 true 실패시 'err' 반환
+    })
+    .catch(e => {
+      err(e);
+    })
+  
+})
+
 //전화번호 중복체크
 app.post('/phoneNumberCheck', async (req, res)=>{
   log('post : /phoneNumberCheck');
