@@ -51,6 +51,22 @@ app.get('/pushTest', (req, res) =>{
   });
 })
 
+app.get('/pushTest2', (req, res) =>{
+  const topic = '\'stockTopic\' in topics';
+  const msg = {
+    notification: {
+      title:'testmsg',
+      body:'testcontent'
+    },
+    condition: topic 
+  }
+  admin.messaging().send(msg)
+    .then(result => {
+      console.log(result);
+      log(result);
+    })
+})
+
 
 
 //사용자 정보 저장
