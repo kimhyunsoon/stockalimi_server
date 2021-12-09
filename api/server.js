@@ -3,10 +3,10 @@
 const express = require('express');
 const app = express();
 const server = require('http').createServer(app);
-
-const io = require('socket.io')(server, { cors: { origin: "*" } });;
-
+const io = require('socket.io')(server, { cors: { origin: "*" } });
 const cors = require('cors');
+
+//cors
 app.use(cors());
 
 //json
@@ -31,54 +31,51 @@ admin.initializeApp({
   credential: admin.credential.cert(serAccount),
 })
 
-// 메시지 형식
-let message = {
-  notification: {
-    title: 'wtet',
-    body: 'asdf'
+// 푸쉬알림발송
+app.post('/stockPushNotification', (req, res) =>{
+  // const title = req.body.title;
+  // const body = req.body.body;
+  const title = '알림제목';
+  const body = '알림내용';
+
+  //푸쉬알림발송은 약속된 문자열 확인 후 처리함
+  if (req.headers.appinformation == 'barunStockPushApp') {
+    log('푸쉬알림발송 : 제목:'+title+', 내용:'+body);
+
+    //stockTopic 구독중인 앱에 firebase 알림 발송 (background)
+    const topic = '\'stockTopic\' in topics';
+    const msg = {
+      notification: {
+        title: title,
+        body: body
+      },
+      condition: topic 
+    }
+    admin.messaging().send(msg)
+      .then(result => {
+        log('fcm : ' + result);
+        res.send('fcm success');
+      })
+      .catch(err =>{
+        err(err);
+        res.send(r);
+      })
+  
+    //앱에 socket 알림 발송 (foreground)
+    io.on('connection', (socket) => {
+      socket.emit('stockPush', msg.notification);
+      log('socket : complete');
+    });
+  } else {
+    res.send('err');
   }
-};
-
-// 푸쉬알림 테스트용
-app.get('/pushTest', (req, res) =>{
-  admin.messaging().sendToTopic('stockTopic', message)
-  .then(r => {
-    console.log("Successfully sent message:", r);
-    res.send("Successfully sent message:");
-  })
-  .catch(e => {
-    console.log("Error sending message:", e);
-    res.send("Error sending message:");
-  });
-})
-
-
-app.get('/pushTest2', (req, res) =>{
-  console.log('asdf');
-  const topic = '\'stockTopic\' in topics';
-  const msg = {
-    notification: {
-      title:'testmsg',
-      body:'testcontent'
-    },
-    condition: topic 
-  }
-  admin.messaging().send(msg)
-    .then(result => {
-      console.log(result);
-      log(result);
-    })
-
-  io.on('connection', (socket) => {
-    socket.emit('msg', msg.notification);
-  });
 })
 
 
 
 //사용자 정보 저장
-app.post('/joinUser', async (req, res) => {
-  log('post : /joinUser');
+app.post('/user', async (req, res) => {
+  log('post : /user');
   const tokenCheck = {
     data: {
       message: "check" //푸쉬할 메시지
@@ -95,13 +92,14 @@ app.post('/joinUser', async (req, res) => {
     })
     .catch(e => {
       err(e);
+      res.send('err');
     })
   
 })
 
 //사용자 정보 업데이트
-app.post('/updateUser', async (req, res) => {
-  log('post : /updateUser');
+app.put('/user', async (req, res) => {
+  log('put : /user');
   const tokenCheck = {
     data: {
       message: "check" //푸쉬할 메시지
@@ -117,30 +115,33 @@ app.post('/updateUser', async (req, res) => {
     })
     .catch(e => {
       err(e);
+      res.send('err');
     })
-  
 })
 
 //전화번호 중복체크
-app.post('/phoneNumberCheck', async (req, res)=>{
-  log('post : /phoneNumberCheck');
-  let phone = req.body.phone;
-  let r = await DBevent.DuplicatePhoneNumberCheck(phone)
-  res.send(r); //없으면 true 있으면 false, 에러시 'err' 반환
+app.get('/phone/:number', async (req, res)=>{
+  const number = req.params.number;
+  log('get : /phone/'+number);
+  //전화번호 중복체크는 약속된 문자열 확인 후 처리함
+  if (req.headers.appinformation == 'barunStockPushApp') {
+    let r = await DBevent.DuplicatePhoneNumberCheck(number)
+    res.send(r); //없으면 true 있으면 false, 에러시 'err' 반환
+  } else {
+    res.send('err'); //약속어가 다르면 err 반환
+  }
 })
-
 
 //크롤링 데이터 요청
-app.get('/getStockInfo', (req, res) =>{
-  log('get : /getStockInfo');
-  //크롤링 데이터 요청의 경우는 간단히 앱-서버 간 약속된 문자열 확인 후 처리함
+app.get('/stockData', (req, res) =>{
+  log('get : /stockData');
+  //크롤링 데이터 요청의 경우는 약속된 문자열 확인 후 처리함
   if (req.headers.appinformation == 'barunStockPushApp') {
-    res.send(CrowlingEvent.totalData)
+    res.send(CrowlingEvent.totalData);
   } else {
-    res.send('err') //약속어가 다르면 'err' 반환
+    res.send('err'); //약속어가 다르면 'err' 반환
   } 
 })
-
 
 server.listen(4040, ()=>{
   log('API 서버 동작중...');
