@@ -1,14 +1,14 @@
 FROM node:16.13
 
+COPY . /api
+WORKDIR /api
+
 RUN apt-get update -y
 RUN apt-get install lsof -y
 
 ARG DEBIAN_FRONTEND=noninteractive
 ENV TZ=Asia/Seoul
 RUN apt-get install -y tzdata
-
-COPY . /api
-WORKDIR /api
 
 # 앱 의존성 설치
 RUN npm install
