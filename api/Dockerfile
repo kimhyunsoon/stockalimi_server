@@ -1,17 +1,21 @@
 FROM node:16.13
 
-COPY . .
 WORKDIR /api
 
-RUN apt-get update -y
-RUN apt-get install lsof -y
+#RUN apt-get update -y
+#RUN apt-get install lsof -y
 
-ARG DEBIAN_FRONTEND=noninteractive
-ENV TZ=Asia/Seoul
-RUN apt-get install -y tzdata
+#ARG DEBIAN_FRONTEND=noninteractive
+#ENV TZ=Asia/Seoul
+#RUN apt-get install -y tzdata
 
-RUN npm install
+#COPY package*.json ./
 
-CMD [ "nodemon", "-L", "server.js" ]
+#RUN npm install
+#RUN npm install -g nodemon
 
-EXPOSE 4040
+COPY . ./
+
+#EXPOSE 4040
+
+#CMD [ "nodemon", "-L", "server.js" ]
