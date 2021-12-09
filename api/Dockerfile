@@ -1,21 +1,18 @@
 FROM node:16.13
 
+# 앱 디렉터리 생성
 WORKDIR /api
 
-#RUN apt-get update -y
-#RUN apt-get install lsof -y
+# 앱 의존성 설치
+COPY package*.json ./
 
-#ARG DEBIAN_FRONTEND=noninteractive
-#ENV TZ=Asia/Seoul
-#RUN apt-get install -y tzdata
 
-#COPY package*.json ./
+# 앱 소스 추가
+COPY . .
 
-#RUN npm install
-#RUN npm install -g nodemon
+RUN npm install
+RUN npm install -g nodemon
 
-COPY . ./
+CMD [ "nodemon", "-L", "server.js" ]
 
-#EXPOSE 4040
-
-#CMD [ "nodemon", "-L", "server.js" ]
+EXPOSE 4040
