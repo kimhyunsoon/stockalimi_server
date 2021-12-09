@@ -1,18 +1,16 @@
 FROM node:16.13
 
-# 앱 디렉터리 생성
 WORKDIR /api
 
-# 앱 의존성 설치
-COPY package*.json ./
+RUN apt-get update -y
+ARG DEBIAN_FRONTEND=noninteractive
+ENV TZ=Asia/Seoul
+RUN apt-get install -y tzdata
 
-
-# 앱 소스 추가
 COPY . .
 
 RUN npm install
 RUN npm install -g nodemon
-
 CMD [ "nodemon", "-L", "server.js" ]
 
 EXPOSE 4040
