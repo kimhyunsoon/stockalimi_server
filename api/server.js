@@ -8,31 +8,26 @@ const cors = require('cors');
 
 //cors
 app.use(cors());
-
 //json
 app.use(express.json());
 
 //로그용
 const log = require("./src/Tale.js").log;
 const err = require("./src/Tale.js").err;
-
-//crud 이벤트들
+//crud
 const DBevent = require('./src/DBevent.js');
-
-//크롤링 이벤트들
+//크롤링
 const CrowlingEvent = require('./src/CrowlingEvent.js')
 
-//파이어베이스
+//firebase
 const admin = require('firebase-admin');
 const serAccount = require('./src/firebase/barunalim-75403-firebase-adminsdk-oyik9-6c046c078d.json');
-
-// firebase 초기화
 admin.initializeApp({
   credential: admin.credential.cert(serAccount),
 })
 
-// 푸쉬알림발송
-app.post('/stockPushNotification', (req, res) =>{
+//푸쉬알림발송
+app.put('/stockPushNotification', (req, res) =>{
   // const title = req.body.title;
   // const body = req.body.body;
   const title = '알림제목';
@@ -70,8 +65,6 @@ app.post('/stockPushNotification', (req, res) =>{
     res.send('err');
   }
 })
-
-
 
 //사용자 정보 저장
 app.post('/user', async (req, res) => {
