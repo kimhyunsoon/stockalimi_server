@@ -1,10 +1,30 @@
 'use strict'; // 엄격
 
 const express = require('express');
-const PORT = 4040;
 const app = express();
-const server = require('http').createServer(app); 
+const server = require('http').createServer(app);
+
 const io = require('socket.io')(server);
+
+
+
+
+io.on('connection' , function(socket) { 
+  console.log('Connect from Client: '+socket) 
+  socket.on('chat', function(data){ 
+    console.log('message from Client: '+data.message) 
+    var rtnMessage = { message: data.message }; 
+    // 클라이언트에게 메시지를 전송한다 
+    socket.broadcast.emit('chat', rtnMessage); 
+  }); 
+})
+io.on('connection', (socket) => {
+  socket.on('send', (data) => {
+    io.emit('push', 'asdfasdf');
+  });
+});
+
+
 
 //cors
 const cors = require('cors');
@@ -53,15 +73,6 @@ app.get('/pushTest', (req, res) =>{
   });
 })
 
-io.on('connection' , function(socket) { 
-  console.log('Connect from Client: '+socket) 
-  socket.on('chat', function(data){ 
-    console.log('message from Client: '+data.message) ;
-    var rtnMessage = { message: data.message }; 
-    // 클라이언트에게 메시지를 전송한다 
-    socket.broadcast.emit('chat', rtnMessage); 
-  }); 
-})
 
 app.get('/pushTest2', (req, res) =>{
   console.log('asdf');
@@ -148,6 +159,6 @@ app.get('/getStockInfo', (req, res) =>{
 })
 
 
-server.listen(PORT, ()=>{
+server.listen(4040, ()=>{
   log('API 서버 동작중...');
 });
