@@ -57,10 +57,8 @@ app.put('/stockPushNotification', (req, res) =>{
       })
   
     //앱에 socket 알림 발송 (foreground)
-    io.on('connection', (socket) => {
-      socket.emit('stockPush', msg.notification);
-      log('socket : complete');
-    });
+    io.emit('stockPush', msg.notification);
+    log('socket : complete');
   } else {
     res.send('err');
   }
