@@ -3,7 +3,6 @@ FROM node:16.13
 COPY . /api
 WORKDIR /api
 
-RUN apt-get update -y
 RUN apt-get install lsof -y
 
 ARG DEBIAN_FRONTEND=noninteractive
@@ -13,6 +12,6 @@ RUN apt-get install -y tzdata
 # 앱 의존성 설치
 RUN npm install
 
-CMD [ "nodemon", "-L", "server.js", ">", "server.log" ]
+CMD [ "nodemon", "-L", "server.js"]
 
 EXPOSE 4040
