@@ -6,18 +6,6 @@ const server = require('http').createServer(app);
 
 const io = require('socket.io')(server, { cors: { origin: "*" } });;
 
-io.on('connection', function (socket) {
-  console.log(socket.id, 'Connected');
-
-  socket.emit('msg', `${socket.id} 연결 되었습니다.`);
-  
-  socket.on('msg', function (data) {
-    console.log(socket.id, data);
-    
-    socket.emit('msg', `Server : "${data}" 받았습니다.`);
-  });
-});
-
 const cors = require('cors');
 app.use(cors());
 
@@ -80,6 +68,10 @@ app.get('/pushTest2', (req, res) =>{
       console.log(result);
       log(result);
     })
+
+  io.on('connection', (socket) => {
+    socket.emit('msg', msg.notification);
+  });
 })
 
 
