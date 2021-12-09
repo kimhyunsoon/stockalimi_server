@@ -52,6 +52,7 @@ app.get('/pushTest', (req, res) =>{
 })
 
 app.get('/pushTest2', (req, res) =>{
+  console.log('asdf');
   const topic = '\'stockTopic\' in topics';
   const msg = {
     notification: {
