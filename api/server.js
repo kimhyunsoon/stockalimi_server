@@ -6,27 +6,18 @@ const server = require('http').createServer(app);
 
 const io = require('socket.io')(server);
 
+io.on('connection', function (socket) {
+  console.log(socket.id, 'Connected');
 
-
-
-io.on('connection' , function(socket) { 
-  console.log('Connect from Client: '+socket) 
-  socket.on('chat', function(data){ 
-    console.log('message from Client: '+data.message) 
-    var rtnMessage = { message: data.message }; 
-    // 클라이언트에게 메시지를 전송한다 
-    socket.broadcast.emit('chat', rtnMessage); 
-  }); 
-})
-io.on('connection', (socket) => {
-  socket.on('send', (data) => {
-    io.emit('push', 'asdfasdf');
+  socket.emit('msg', `${socket.id} 연결 되었습니다.`);
+  
+  socket.on('msg', function (data) {
+    console.log(socket.id, data);
+    
+    socket.emit('msg', `Server : "${data}" 받았습니다.`);
   });
 });
 
-
-
-//cors
 const cors = require('cors');
 app.use(cors());
 
