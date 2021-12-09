@@ -1,9 +1,9 @@
 FROM node:16.13
 
-COPY . /api
+COPY . .
 WORKDIR /api
 
-RUN apt-get update &&
+RUN apt-get update -y
 RUN apt-get install lsof -y
 
 ARG DEBIAN_FRONTEND=noninteractive
