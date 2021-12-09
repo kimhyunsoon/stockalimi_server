@@ -10,9 +10,9 @@ services:
       - backend
   api:
     image: "barunalim_api:0.1" 
-    volumes:
-      - /home/master/api:/api
-      - /api/node_modules
+    #volumes:
+            #- /home/master/api:/api
+            #- /api/node_modules
     networks:
       - backend
   db:

@@ -12,6 +12,6 @@ RUN apt-get install -y tzdata
 
 RUN npm install
 
-CMD [ "nodemon", "-L", "server.js"]
+CMD [ "nodemon", "-L", "server.js" ]
 
 EXPOSE 4040
