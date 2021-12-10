@@ -27,7 +27,7 @@ admin.initializeApp({
 })
 
 //푸쉬알림발송
-app.put('/stockPush', (req, res) =>{
+app.put('/notification', (req, res) =>{
   const title = req.body.title;
   const body = req.body.body;
 
@@ -122,7 +122,7 @@ app.get('/phone/:number', async (req, res)=>{
 })
 
 //크롤링 데이터 요청
-app.get('/stockData', (req, res) =>{
+app.get('/stock', (req, res) =>{
   log('get : /stockData');
   //크롤링 데이터 요청의 경우는 약속된 문자열 확인 후 처리함
   if (req.headers.appinformation == 'barunStockPushApp') {
