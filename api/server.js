@@ -27,11 +27,9 @@ admin.initializeApp({
 })
 
 //푸쉬알림발송
-app.put('/stockPushNotification', (req, res) =>{
-  // const title = req.body.title;
-  // const body = req.body.body;
-  const title = '알림제목';
-  const body = '알림내용';
+app.put('/stockPush', (req, res) =>{
+  const title = req.body.title;
+  const body = req.body.body;
 
   //푸쉬알림발송은 약속된 문자열 확인 후 처리함
   if (req.headers.appinformation == 'barunStockPushApp') {
