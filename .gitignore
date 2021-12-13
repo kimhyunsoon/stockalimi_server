@@ -31,4 +31,5 @@ db.env
 /data
 .docker
 api/src/firebase
+api/src/DBinfo.js
 api/server.log
