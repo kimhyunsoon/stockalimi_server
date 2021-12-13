@@ -33,3 +33,4 @@ db.env
 api/src/firebase
 api/server.log
 api/src/DBinfo.js
+.vim/
