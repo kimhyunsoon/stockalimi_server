@@ -7,11 +7,11 @@ const log = require("./Tale.js").log;
 const err = require("./Tale.js").err;
 
 const pool = mariadb.createPool({
-  host: DBinfo.barunalim.host, 
-  port:DBinfo.barunalim.port,
-  user: DBinfo.barunalim.user, 
-  password: DBinfo.barunalim.password,
-  database: DBinfo.barunalim.database,
+  host: DBinfo.stockalimi.host, 
+  port:DBinfo.stockalimi.port,
+  user: DBinfo.stockalimi.user, 
+  password: DBinfo.stockalimi.password,
+  database: DBinfo.stockalimi.database,
   connectionLimit: 5
 });
 
