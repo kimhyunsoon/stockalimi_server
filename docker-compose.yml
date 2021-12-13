@@ -9,7 +9,7 @@ services:
     networks:
       - backend
   api:
-    image: "barunalim_api:0.2" 
+    image: "stockalimi_api:0.1" 
     networks:
       - backend
   db:

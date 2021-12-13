@@ -112,8 +112,7 @@ app.put('/user', async (req, res) => {
 app.get('/phone/:number/:app', async (req, res)=>{
   const number = req.params.number;
   const app = decodeURI(req.params.app);
-  log(app);
-
+  
   log('get : /phone/'+number+'/'+app);
   //전화번호 중복체크는 약속된 문자열 확인 후 처리함
   if (req.headers.appinformation == 'stockalimi') {
