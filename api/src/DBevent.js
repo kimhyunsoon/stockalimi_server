@@ -17,17 +17,17 @@ const pool = mariadb.createPool({
 
 
 //전화번호 중복체크
-const DuplicatePhoneNumberCheck = async number => {
+const DuplicatePhoneNumberCheck = async (number, app) => {
   let conn;
   try {
     conn = await pool.getConnection();
     const res = await conn.query(
-      "SELECT COUNT(*) as cnt FROM user_information WHERE phone='" + number + "'"
+      "SELECT COUNT(*) as cnt FROM user_information WHERE phone='" + number + "' AND app_name= '" + app+"'"
     );
     if (res[0].cnt == 0){
-      log(number + ", 등록되어있지않음")
+      log(number + "/" + app+", 등록되어있지않음")
     } else {
-      log(number + ", 등록되어있음")
+      log(number + "/" + app+", 등록되어있음")
     }
     return await res[0].cnt == 0; // 있으면 false, 없으면 true 반환
   } catch (e) {

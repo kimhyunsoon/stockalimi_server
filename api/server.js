@@ -21,7 +21,7 @@ const CrowlingEvent = require('./src/CrowlingEvent.js')
 
 //firebase
 const admin = require('firebase-admin');
-const serAccount = require('./src/firebase/barunalim-75403-firebase-adminsdk-oyik9-6c046c078d.json');
+const serAccount = require('./src/firebase/stockalimi.json');
 admin.initializeApp({
   credential: admin.credential.cert(serAccount),
 })
@@ -109,12 +109,15 @@ app.put('/user', async (req, res) => {
 })
 
 //전화번호 중복체크
-app.get('/phone/:number', async (req, res)=>{
+app.get('/phone/:number/:app', async (req, res)=>{
   const number = req.params.number;
-  log('get : /phone/'+number);
+  const app = decodeURI(req.params.app);
+  log(app);
+
+  log('get : /phone/'+number+'/'+app);
   //전화번호 중복체크는 약속된 문자열 확인 후 처리함
-  if (req.headers.appinformation == 'barunStockPushApp') {
-    let r = await DBevent.DuplicatePhoneNumberCheck(number)
+  if (req.headers.appinformation == 'stockalimi') {
+    let r = await DBevent.DuplicatePhoneNumberCheck(number, app)
     res.send(r); //없으면 true 있으면 false, 에러시 'err' 반환
   } else {
     res.send('err'); //약속어가 다르면 err 반환
@@ -125,7 +128,7 @@ app.get('/phone/:number', async (req, res)=>{
 app.get('/stock', (req, res) =>{
   log('get : /stockData');
   //크롤링 데이터 요청의 경우는 약속된 문자열 확인 후 처리함
-  if (req.headers.appinformation == 'barunStockPushApp') {
+  if (req.headers.appinformation == 'stockalimi') {
     res.send(CrowlingEvent.totalData);
   } else {
     res.send('err'); //약속어가 다르면 'err' 반환
