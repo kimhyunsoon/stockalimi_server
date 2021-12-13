@@ -30,5 +30,5 @@ selenium-debug.log
 db.env
 /data
 .docker
-barunalim-75403-firebase-adminsdk-oyik9-6c046c078d.json
+api/src/firebase
 api/server.log
