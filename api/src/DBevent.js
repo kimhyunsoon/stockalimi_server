@@ -51,7 +51,7 @@ const CreateUser = async user => {
     return await true; //성공시 true
   } catch (e) {
     console.log(e);
-    err('DBevent : joinUser');
+    err('DBevent : joinUser11');
     return await 'err'; // 실패시 'err'
   } finally {
     if (conn) conn.release();
