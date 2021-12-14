@@ -11,7 +11,7 @@ services:
   api:
     image: "stockalimi_api:0.1" 
     volumes:
-      - /home/master/api:/api
+      - /home/master/api/src:/api/src
     networks:
       - backend
   db:
