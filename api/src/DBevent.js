@@ -45,13 +45,13 @@ const CreateUser = async user => {
   try {
     conn = await pool.getConnection();
     const res = await conn.query(
-      "INSERT INTO user_information VALUE('"+user.name+"', '"+user.phone+"', NOW())"
+      "INSERT INTO user_information (name, phone, join_date, app_name) VALUE('"+user.name+"', '"+user.phone+"', NOW(), '"+user.app_name+"')"
     );
     log(user.name+', '+user.phone+' 등록완료');
     return await true; //성공시 true
   } catch (e) {
     console.log(e);
-    err('DBevent : joinUser11');
+    err('DBevent : CreateUser');
     return await 'err'; // 실패시 'err'
   } finally {
     if (conn) conn.release();
@@ -64,13 +64,13 @@ const UpdateUser = async user => {
   try {
     conn = await pool.getConnection();
     const res = await conn.query(
-      "UPDATE user_information SET name='"+user.name+"', phone='"+user.phone+"', join_date=NOW() WHERE phone='"+user.phone+"'"
+      "UPDATE user_information SET name='"+user.name+"', phone='"+user.phone+"', join_date=NOW() WHERE phone='"+user.phone+"' AND app_name='"+user.app_name+"'"
     );
     log(user.name+', '+user.phone+' 등록완료');
     return await true; //성공시 true
   } catch (e) {
     console.log(e);
-    err('DBevent : joinUser');
+    err('DBevent : UpdateUser');
     return await 'err'; // 실패시 'err'
   } finally {
     if (conn) conn.release();

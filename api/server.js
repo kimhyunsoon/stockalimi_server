@@ -100,7 +100,7 @@ app.put('/user', async (req, res) => {
   admin.messaging().send(tokenCheck)
     .then( async result => { //토큰으로 푸쉬알림 발송시도가 성공하면 (앱에서 수신하지는 않음)
       let r = await DBevent.UpdateUser(req.body);
-      res.send(r); //성공시 true 실패시 'err' 반환
+      await res.send(r); //성공시 true 실패시 'err' 반환
     })
     .catch(e => {
       err(e);

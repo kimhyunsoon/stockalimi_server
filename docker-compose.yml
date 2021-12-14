@@ -10,6 +10,8 @@ services:
       - backend
   api:
     image: "stockalimi_api:0.1" 
+    volumes:
+      - /home/master/api:/api
     networks:
       - backend
   db:
