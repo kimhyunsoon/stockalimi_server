@@ -77,7 +77,7 @@ app.post('/user', async (req, res) => {
     .then( async result => { //토큰으로 푸쉬알림 발송시도가 성공하면 (앱에서 수신하지는 않음)
       log('apptoken check: '+ req.headers.apptoken);
       let r = await DBevent.CreateUser(req.body);
-      res.send(r); //성공시 true 실패시 'err' 반환
+      await res.send(r); //성공시 true 실패시 'err' 반환
     })
     .catch(e => {
       err(e);
