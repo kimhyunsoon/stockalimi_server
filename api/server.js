@@ -30,19 +30,20 @@ admin.initializeApp({
 app.put('/notification', (req, res) =>{
   const title = req.body.title;
   const body = req.body.body;
+  const topic = req.body.topic;
 
   //푸쉬알림발송은 약속된 문자열 확인 후 처리함
-  if (req.headers.appinformation == 'barunStockPushApp') {
-    log('푸쉬알림발송 : 제목:'+title+', 내용:'+body);
+  if (req.headers.appinformation == 'stockalimi') {
+    log('push_topic:'+topic+', title:'+title+', body:'+body);
 
     //stockTopic 구독중인 앱에 firebase 알림 발송 (background)
-    const topic = '\'stockTopic\' in topics';
+    const topicString = "'"+topic+"' in topics";
     const msg = {
       notification: {
         title: title,
         body: body
       },
-      condition: topic 
+      condition: topicString 
     }
     admin.messaging().send(msg)
       .then(result => {
@@ -55,7 +56,7 @@ app.put('/notification', (req, res) =>{
       })
   
     //앱에 socket 알림 발송 (foreground)
-    io.emit('stockPush', msg.notification);
+    io.emit(topic, msg.notification);
     log('socket : complete');
   } else {
     res.send('err');
