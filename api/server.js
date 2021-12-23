@@ -71,19 +71,18 @@ app.put('/notification', async (req, res) =>{
   }
 })
 
-//@사용자 만료 검사
-app.get('/expiration/:date/:phone', async (req, res) => {
-  const date = req.params.date;
+//@사용자 만료일 조회
+app.get('/expiration/:phone', async (req, res) => {
   const phone = req.params.phone;
   const app = req.headers.appcode;
   const key = req.headers.apikey;
 
-  log(`get : /expiration/${app}/${date}/${phone}`);
+  log(`get : /expiration/${app}/${phone}`);
 
   //앱 등록 여부 검사
   let checkResult = await DBevent.validAppCheck(app, key);
   if (checkResult === true) {
-    let r = await DBevent.userExpirationCheck(app, date, phone);
+    let r = await DBevent.userExpirationCheck(app, phone);
     res.send(r); //json 객체 반환
     /*
     {
@@ -296,6 +295,24 @@ app.get('/contact/list', async (req, res) => {
   if(checkResult === true) {
     let r = await DBevent.contactList(app);
     res.send(r); //조회목록 반환
+  } else {
+    log(`등록되지 않은 앱 : ${app}/${key}`);
+    res.send('403'); //등록된 앱이 아니면 403 반환
+  }
+})
+
+//@앱 정보 불러오기
+app.get('/app', async (req, res) => {
+  const app = req.headers.appcode;
+  const key = req.headers.apikey;
+
+  log(`get : /app (${app})`);
+
+  //앱 등록 여부 검사
+  let checkResult = await DBevent.validAppCheck(app, key);
+  if (checkResult === true) {
+    let r = await DBevent.getAppInformaion(app);
+    res.send(r); //json 객체 반환
   } else {
     log(`등록되지 않은 앱 : ${app}/${key}`);
     res.send('403'); //등록된 앱이 아니면 403 반환

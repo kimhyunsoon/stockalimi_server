@@ -34,6 +34,25 @@ const validAppCheck = async (app_code, api_key) => {
   }
 }
 
+//앱 정보 조회
+const getAppInformaion = async (app_code) => {
+  let conn;
+  try {
+    conn = await pool.getConnection();
+    const res = await conn.query(
+      `SELECT app_name, app_color, default_valid, terms_conditions FROM app_list WHERE app_code='${app_code}'`
+    );
+    
+    return res.length == 1?res:'400';
+    
+  } catch (e) {
+    err(`DBevent ERROR : getAppInformaion(${app_code}`);
+    console.log(e);
+    return "400"; // 실패시 400
+  } finally {
+    if (conn) conn.release();
+  }
+}
 
 //전화번호 중복 검사
 const duplicatePhoneNumberCheck = async (number, app_code) => {
@@ -110,8 +129,8 @@ const updateUserExpDate = async (phone, app_code, date) => {
   }
 }
 
-//사용자 만료 검사
-const userExpirationCheck = async (app_code, date, phone) => {
+//사용자 만료일 조회
+const userExpirationCheck = async (app_code, phone) => {
   let conn;
   try {
     conn = await pool.getConnection();
@@ -140,7 +159,7 @@ const userExpirationCheck = async (app_code, date, phone) => {
       return reData;
     }
   } catch (e) {
-    err(`DBevent ERROR : userExpirationCheck(${app_code}/${date}/${phone})`);
+    err(`DBevent ERROR : userExpirationCheck(${app_code}/${phone})`);
     console.log(e);
     return "400"; // 실패시 400
   } finally {
@@ -271,4 +290,5 @@ module.exports = {
   userList : userList,
   updateContactAnswer : updateContactAnswer,
   contactList : contactList,
+  getAppInformaion : getAppInformaion
 }
