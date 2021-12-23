@@ -87,7 +87,7 @@ const UserExpirationCheck = async (app_code, date, phone) => {
     );
     if (res[0] === undefined){
       log(app_code + "/" + phone+", 등록되어있지않음");
-      return await undefined;
+      return await 'unregist';
     } else {
       const now = moment();
       const expDate = moment(res[0].expiration_date);
