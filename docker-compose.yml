@@ -23,6 +23,8 @@ services:
     volumes:
       - /home/master/data:/var/lib/mysql
       - /home/master/db/custom.conf:/etc/mysql/conf.d/custom.cnf
+    environment: 
+    - TZ=Asia/Seoul
     networks:
       - backend
     

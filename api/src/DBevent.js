@@ -22,7 +22,7 @@ const DuplicatePhoneNumberCheck = async (number, app) => {
   try {
     conn = await pool.getConnection();
     const res = await conn.query(
-      "SELECT COUNT(*) as cnt FROM user_information WHERE phone='" + number + "' AND app_name= '" + app+"'"
+      "SELECT COUNT(*) as cnt FROM user_information WHERE phone='" + number + "' AND app_code= '" + app + "'"
     );
     if (res[0].cnt == 0){
       log(number + "/" + app+", 등록되어있지않음")
@@ -77,8 +77,37 @@ const UpdateUser = async user => {
   }
 }
 
+//만료일 조회
+const UserExpirationCheck = async (app_code, date, phone) => {
+  let conn;
+  try {
+    conn = await pool.getConnection();
+    const res = await conn.query(
+      "SELECT expiration_date FROM user_information WHERE phone='" + phone + "' AND app_code='" + app_code + "'"
+    );
+    if (res[0] === undefined){
+      log(app_code + "/" + phone+", 등록되어있지않음");
+      return await undefined;
+    } else {
+      const now = moment();
+      const expDate = moment(res[0].expiration_date);
+      const expTest = expDate.isAfter(now);
+
+      log(expTest);
+      return await expTest; //만료일이 남아있으면 true 아니면 false 반환;
+    }
+  } catch (e) {
+    err(`DBevent : 만료일 조회(${app_code}/${date}/${phone})`);
+    console.log(e);
+    return await "err"; // 실패시 'err'
+  } finally {
+    if (conn) conn.release();
+  }
+}
+
 module.exports = {
   DuplicatePhoneNumberCheck : DuplicatePhoneNumberCheck,
   CreateUser : CreateUser,
   UpdateUser : UpdateUser,
+  UserExpirationCheck : UserExpirationCheck
 }

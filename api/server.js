@@ -33,10 +33,10 @@ app.put('/notification', (req, res) =>{
   const topic = req.body.topic;
 
   //푸쉬알림발송은 약속된 문자열 확인 후 처리함
-  if (req.headers.appinformation == 'stockalimi') {
-    log('push_topic:'+topic+', title:'+title+', body:'+body);
+  if (req.headers.api_code == 'XvBdJvufBnX4RIAuIgWAPGxA') {
+    log('topic:'+topic+', title:'+title+', body:'+body);
 
-    //stockTopic 구독중인 앱에 firebase 알림 발송 (background)
+    //topic 구독중인 앱에 firebase 알림 발송 (background)
     const topicString = "'"+topic+"' in topics";
     const msg = {
       notification: {
@@ -57,9 +57,24 @@ app.put('/notification', (req, res) =>{
   
     //앱에 socket 알림 발송 (foreground)
     io.emit(topic, msg.notification);
-    log('socket : complete');
+    log('socket : "'+topic+'" complete');
   } else {
     res.send('err');
+  }
+})
+
+//앱사용기간 만료여부 조회
+app.get('/expiration/:app_code/:date/:phone', async (req, res) => {
+  const app_code = req.params.app_code;
+  const date = req.params.date;
+  const phone = req.params.phone;
+  log(`get : /expiration/${app_code}/${date}/${phone}`);
+  //만료 여부 조회는 약속된 문자열 확인 후 처리함
+  if (req.headers.api_code == 'XvBdJvufBnX4RIAuIgWAPGxA') {
+    let r = await DBevent.UserExpirationCheck(app_code, date, phone);
+    res.send(r); //마감되었으면 false, 아니면 true, 에러시 'err' 반환
+  } else {
+    res.send('err'); //약속어가 다르면 err 반환
   }
 })
 
@@ -116,7 +131,7 @@ app.get('/phone/:number/:app', async (req, res)=>{
   
   log('get : /phone/'+number+'/'+app);
   //전화번호 중복체크는 약속된 문자열 확인 후 처리함
-  if (req.headers.appinformation == 'stockalimi') {
+  if (req.headers.api_code == 'XvBdJvufBnX4RIAuIgWAPGxA') {
     let r = await DBevent.DuplicatePhoneNumberCheck(number, app)
     res.send(r); //없으면 true 있으면 false, 에러시 'err' 반환
   } else {
@@ -126,9 +141,9 @@ app.get('/phone/:number/:app', async (req, res)=>{
 
 //크롤링 데이터 요청
 app.get('/stock', (req, res) =>{
-  log('get : /stockData');
+  log('get : /stock');
   //크롤링 데이터 요청의 경우는 약속된 문자열 확인 후 처리함
-  if (req.headers.appinformation == 'stockalimi') {
+  if (req.headers.api_code == 'XvBdJvufBnX4RIAuIgWAPGxA') {
     res.send(CrowlingEvent.totalData);
   } else {
     res.send('err'); //약속어가 다르면 'err' 반환
