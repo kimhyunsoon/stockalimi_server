@@ -72,17 +72,17 @@ app.put('/notification', async (req, res) =>{
 })
 
 //@사용자 만료일 조회
-app.get('/expiration/:seq', async (req, res) => {
-  const seq = req.params.seq;
+app.get('/expiration/:phone', async (req, res) => {
+  const phone = req.params.phone;
   const app = req.headers.appcode;
   const key = req.headers.apikey;
 
-  log(`get : /expiration/${seq}`);
+  log(`get : /expiration/${phone}`);
 
   //앱 등록 여부 검사
   let checkResult = await DBevent.validAppCheck(app, key);
   if (checkResult === true) {
-    let r = await DBevent.userExpirationCheck(seq);
+    let r = await DBevent.userExpirationCheck(phone, app);
     res.send(r); //json 객체 반환
     /*
     {

@@ -130,12 +130,12 @@ const updateUserExpDate = async (seq, date) => {
 }
 
 //사용자 만료일 조회
-const userExpirationCheck = async (seq) => {
+const userExpirationCheck = async (phone, app_code) => {
   let conn;
   try {
     conn = await pool.getConnection();
     const res = await conn.query(
-      `SELECT expiration_date FROM user_information WHERE seq='${seq}'`
+      `SELECT user.expiration_date, app.default_valid FROM user_information user JOIN app_list app WHERE app.app_code = '${app_code}' AND user.phone='${phone}'`
     );
     if (res[0] === undefined){
       return "400";
@@ -144,7 +144,7 @@ const userExpirationCheck = async (seq) => {
       const exp = moment(res[0].expiration_date);
 
       const nowYMD = moment(now.format('YYYY-MM-DD'));
-      const expYMD = moment(exp.add(1, 'days').format('YYYY-MM-DD'));
+      const expYMD = moment(exp.add(res[0].default_valid, 'days'));
 
       let dDayCnt = 0;
       if(exp.isAfter(now)){
@@ -153,8 +153,9 @@ const userExpirationCheck = async (seq) => {
       }
       const reData = {
         result : exp.isAfter(now), // 만료일이 남아있으면 true 아니면 false
-        expDate : expYMD, // 만료일자 ('YYYY-MM-DD')
-        dDayCnt : dDayCnt, // 남은일자
+        exp_date : expYMD.format('YYYY-MM-DD'), // 만료일자 ('YYYY-MM-DD')
+        dday_cnt : dDayCnt, // 남은일자
+
       }
       return reData;
     }
@@ -191,7 +192,7 @@ const createNotificationHistory = async (title, body, app_code) => {
   try {
     conn = await pool.getConnection();
     const res = await conn.query(
-      `INSERT INTO notification_history (title, body, push_date, app_code) VALUE('${title}', ${body}, NOW(), ${app_code})`
+      `INSERT INTO notification_history (title, body, push_date, app_code) VALUE('${title}', '${body}', NOW(), '${app_code}')`
     );
     return 'SUCCESS'; //성공시 SUCCESS
   } catch (e) {
@@ -209,7 +210,7 @@ const createContactList = async (name, phone, app_code) => {
   try {
     conn = await pool.getConnection();
     const res = await conn.query(
-      `INSERT INTO contact_list (app_code, name, phone, contact_date) VALUE('${app_code}', ${name}, ${phone} ,NOW())`
+      `INSERT INTO contact_list (app_code, user_name, user_phone, contact_date) VALUE('${app_code}', '${name}', '${phone}' ,NOW())`
     );
     return res.affectedRows == 1?true:'400'; //성공시 true
   } catch (e) {
