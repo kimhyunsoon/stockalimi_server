@@ -94,11 +94,11 @@ const createUser = async (user, app_code) => {
 //사용자 가망 여부 갱신
 const updateUserProspective = async (phone, app_code, bool) => {
   let conn;
-  const prospective_user = bool?1:0;
+  const prospective_bool = bool?1:0;
   try {
     conn = await pool.getConnection();
     const res = await conn.query(
-      `UPDATE user_information SET prospective_user='${prospective_user}' WHERE phone='${phone}' AND app_code='${app_code}'`
+      `UPDATE user_information SET prospective_user='${prospective_bool}' WHERE phone='${phone}' AND app_code='${app_code}'`
     );
     return res.affectedRows == 1?true:'400'; //성공시 true
   } catch (e) {
@@ -111,13 +111,13 @@ const updateUserProspective = async (phone, app_code, bool) => {
 }
 
 //사용자 만료일 갱신
-const updateUserExpDate = async (phone, app_code, date) => {
+const updateUserExpDate = async (seq, date) => {
   let conn;
   const expDate = `${date.subtract(1, 'days').format('YYYY-MM-DD')} 23:59:59`;
   try {
     conn = await pool.getConnection();
     const res = await conn.query(
-      `UPDATE user_information SET expiration_date='${expDate}' WHERE phone='${phone}' AND app_code='${app_code}'`
+      `UPDATE user_information SET expiration_date='${expDate}' WHERE seq='${seq}'`
     );
     return res.affectedRows == 1?true:'400'; //성공시 true
   } catch (e) {
@@ -130,12 +130,12 @@ const updateUserExpDate = async (phone, app_code, date) => {
 }
 
 //사용자 만료일 조회
-const userExpirationCheck = async (app_code, phone) => {
+const userExpirationCheck = async (seq) => {
   let conn;
   try {
     conn = await pool.getConnection();
     const res = await conn.query(
-      `SELECT expiration_date FROM user_information WHERE phone='${phone}' AND app_code='${app_code}'`
+      `SELECT expiration_date FROM user_information WHERE seq='${seq}'`
     );
     if (res[0] === undefined){
       return "400";
@@ -275,6 +275,23 @@ const contactList = async (app_code) => {
   }
 }
 
+//알림 기록 조회 (유저 별)
+const notificationList = async (phone, app_code) => {
+  let conn;
+  try {
+    conn = await pool.getConnection();
+    const res = await conn.query(
+      `SELECT seq, title, body, push_date FROM notification_history WHERE push_date > (SELECT join_date FROM user_information WHERE phone='${phone}' AND app_code='${app_code}')`
+    );
+    return res;
+  } catch (e) {
+    err(`DBevent ERROR : notificationList(${phone}, ${app_code})`);
+    console.log(e);
+    return "400"; // 실패시 400
+  } finally {
+    if (conn) conn.release();
+  }
+}
 
 
 module.exports = {
@@ -290,5 +307,6 @@ module.exports = {
   userList : userList,
   updateContactAnswer : updateContactAnswer,
   contactList : contactList,
-  getAppInformaion : getAppInformaion
+  getAppInformaion : getAppInformaion,
+  notificationList : notificationList
 }

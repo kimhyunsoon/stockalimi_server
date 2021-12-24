@@ -72,17 +72,17 @@ app.put('/notification', async (req, res) =>{
 })
 
 //@사용자 만료일 조회
-app.get('/expiration/:phone', async (req, res) => {
-  const phone = req.params.phone;
+app.get('/expiration/:seq', async (req, res) => {
+  const seq = req.params.seq;
   const app = req.headers.appcode;
   const key = req.headers.apikey;
 
-  log(`get : /expiration/${app}/${phone}`);
+  log(`get : /expiration/${seq}`);
 
   //앱 등록 여부 검사
   let checkResult = await DBevent.validAppCheck(app, key);
   if (checkResult === true) {
-    let r = await DBevent.userExpirationCheck(app, phone);
+    let r = await DBevent.userExpirationCheck(seq);
     res.send(r); //json 객체 반환
     /*
     {
@@ -165,7 +165,7 @@ app.get('/stock', async (req, res) =>{
 app.put('/user/expiration', async (req, res) => {
   const app = req.headers.appcode;
   const key = req.headers.apikey;
-  const phone = req.body.phone;
+  const seq = req.body.seq;
   const date = req.body.date;
 
   log('put : /user/prospective');
@@ -173,7 +173,7 @@ app.put('/user/expiration', async (req, res) => {
   //앱 등록 여부 검사
   let checkResult = await DBevent.validAppCheck(app, key);
   if(checkResult === true) {
-    let r = await DBevent.updateUserExpDate(phone, app, date);
+    let r = await DBevent.updateUserExpDate(seq, date);
     res.send(r);
     //사용자 만료일 갱신 후 성공시 true 실패시 400 반환
   } else {
@@ -312,6 +312,25 @@ app.get('/app', async (req, res) => {
   let checkResult = await DBevent.validAppCheck(app, key);
   if (checkResult === true) {
     let r = await DBevent.getAppInformaion(app);
+    res.send(r); //json 객체 반환
+  } else {
+    log(`등록되지 않은 앱 : ${app}/${key}`);
+    res.send('403'); //등록된 앱이 아니면 403 반환
+  }
+})
+
+//@알림 기록 조회 (유저 별)
+app.get('/notification/:phone', async (req, res) => {
+  const app = req.headers.appcode;
+  const key = req.headers.apikey;
+  const phone = req.params.phone;
+
+  log(`get : /notification/${phone}`);
+
+  //앱 등록 여부 검사
+  let checkResult = await DBevent.validAppCheck(app, key);
+  if (checkResult === true) {
+    let r = await DBevent.notificationList(phone, app);
     res.send(r); //json 객체 반환
   } else {
     log(`등록되지 않은 앱 : ${app}/${key}`);
