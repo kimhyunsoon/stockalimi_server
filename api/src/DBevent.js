@@ -129,13 +129,13 @@ const updateUserExpDate = async (seq, date) => {
   }
 }
 
-//사용자 만료일, 알림수신여부 조회
+//사용자 만료일, 알림수신여부, 이름 조회
 const userExpirationCheck = async (phone, app_code) => {
   let conn;
   try {
     conn = await pool.getConnection();
     const res = await conn.query(
-      `SELECT user.expiration_date, user.notification_flag, app.default_valid FROM user_information user JOIN app_list app WHERE app.app_code = '${app_code}' AND user.phone='${phone}'`
+      `SELECT user.name, user.expiration_date, user.notification_flag, app.default_valid FROM user_information user JOIN app_list app WHERE app.app_code = '${app_code}' AND user.phone='${phone}'`
     );
     if (res[0] === undefined){
       return "400";
@@ -153,6 +153,7 @@ const userExpirationCheck = async (phone, app_code) => {
         //남은일자 계산
       }
       const reData = {
+        name : res[0].name,
         result : exp.isAfter(now), // 만료일이 남아있으면 true 아니면 false
         exp_date : expYMD.format('YYYY-MM-DD'), // 만료일자 ('YYYY-MM-DD')
         dday_cnt : dDayCnt, // 남은일자

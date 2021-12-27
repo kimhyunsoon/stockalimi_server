@@ -71,7 +71,7 @@ app.put('/notification', async (req, res) =>{
   }
 })
 
-//@사용자 만료일 조회
+//@사용자 만료일, 알림수신여부, 이름 조회
 app.get('/expiration/:phone', async (req, res) => {
   const phone = req.params.phone;
   const app = req.headers.appcode;
