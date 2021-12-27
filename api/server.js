@@ -89,6 +89,7 @@ app.get('/expiration/:phone', async (req, res) => {
       result : 만료일이 남아있으면 true 아니면 false
       expDate : 만료일자 ('YYYY-MM-DD')
       dDayCnt : 남은일자
+      notification : 알림 수신여부
     }
     */
   } else {
@@ -332,6 +333,27 @@ app.get('/notification/:phone', async (req, res) => {
   if (checkResult === true) {
     let r = await DBevent.notificationList(phone, app);
     res.send(r); //json 객체 반환
+  } else {
+    log(`등록되지 않은 앱 : ${app}/${key}`);
+    res.send('403'); //등록된 앱이 아니면 403 반환
+  }
+})
+
+//@사용자 알림 수신여부 갱신
+app.put('/user/notification', async (req, res) => {
+  const app = req.headers.appcode;
+  const key = req.headers.apikey;
+  const phone = req.body.phone;
+  const bool = req.body.bool == 'true' ? true : false;
+
+  log('put : /user/notification');
+
+  //앱 등록 여부 검사
+  let checkResult = await DBevent.validAppCheck(app, key);
+  if(checkResult === true) {
+    let r = await DBevent.updateUserNotification(phone, app, bool);
+    res.send(r);
+    //사용자 알림 수신여부 갱신 후 성공시 true 실패시 400 반환
   } else {
     log(`등록되지 않은 앱 : ${app}/${key}`);
     res.send('403'); //등록된 앱이 아니면 403 반환

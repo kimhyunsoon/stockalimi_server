@@ -129,17 +129,18 @@ const updateUserExpDate = async (seq, date) => {
   }
 }
 
-//사용자 만료일 조회
+//사용자 만료일, 알림수신여부 조회
 const userExpirationCheck = async (phone, app_code) => {
   let conn;
   try {
     conn = await pool.getConnection();
     const res = await conn.query(
-      `SELECT user.expiration_date, app.default_valid FROM user_information user JOIN app_list app WHERE app.app_code = '${app_code}' AND user.phone='${phone}'`
+      `SELECT user.expiration_date, user.notification_flag, app.default_valid FROM user_information user JOIN app_list app WHERE app.app_code = '${app_code}' AND user.phone='${phone}'`
     );
     if (res[0] === undefined){
       return "400";
     } else {
+      const notification = res[0].notification_flag == 1?true:false;
       const now = moment(); 
       const exp = moment(res[0].expiration_date);
 
@@ -155,6 +156,7 @@ const userExpirationCheck = async (phone, app_code) => {
         result : exp.isAfter(now), // 만료일이 남아있으면 true 아니면 false
         exp_date : expYMD.format('YYYY-MM-DD'), // 만료일자 ('YYYY-MM-DD')
         dday_cnt : dDayCnt, // 남은일자
+        notification : notification // 알림 수신여부
 
       }
       return reData;
@@ -282,13 +284,32 @@ const notificationList = async (phone, app_code) => {
   try {
     conn = await pool.getConnection();
     const res = await conn.query(
-      `SELECT seq, title, body, push_date FROM notification_history WHERE push_date > (SELECT join_date FROM user_information WHERE phone='${phone}' AND app_code='${app_code}')`
+      `SELECT seq, title, body, push_date FROM notification_history WHERE push_date > (SELECT join_date FROM user_information WHERE phone='${phone}' AND app_code='${app_code}') ORDER BY push_date DESC`
     );
     return res;
   } catch (e) {
     err(`DBevent ERROR : notificationList(${phone}, ${app_code})`);
     console.log(e);
     return "400"; // 실패시 400
+  } finally {
+    if (conn) conn.release();
+  }
+}
+
+//사용자 알림 수신여부 갱신
+const updateUserNotification = async (phone, app_code, bool) => {
+  let conn;
+  const notification_bool = bool?1:0;
+  try {
+    conn = await pool.getConnection();
+    const res = await conn.query(
+      `UPDATE user_information SET notification_flag='${notification_bool}' WHERE phone='${phone}' AND app_code='${app_code}'`
+    );
+    return res.affectedRows == 1?true:'400'; //성공시 true
+  } catch (e) {
+    console.log(e);
+    err('DBevent ERROR : updateUserNotification');
+    return '400'; // 실패시 400
   } finally {
     if (conn) conn.release();
   }
@@ -304,6 +325,7 @@ module.exports = {
   createContactList : createContactList,
   updateContactMemo : updateContactMemo,
   updateUserProspective : updateUserProspective,
+  updateUserNotification : updateUserNotification,
   updateUserExpDate : updateUserExpDate,
   userList : userList,
   updateContactAnswer : updateContactAnswer,

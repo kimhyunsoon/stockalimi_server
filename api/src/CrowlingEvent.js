@@ -36,7 +36,7 @@ const kosCrawFunc = (dataArr, name) => {
   return c;
 }
 
-//거래순위 1~10 데이터
+//거래상위 1~10 데이터
 const startRank = 1;
 const endRank = 10;
 const listCrawFunc = () => {
@@ -44,7 +44,7 @@ const listCrawFunc = () => {
     maxConnections : 10,
     callback : function (error, res, done) {
       if(error){
-        err('크롤링 실패 : 거래순위');
+        err('크롤링 실패 : 거래상위');
         return false;
       }else{
         let $ = res.$;
@@ -59,7 +59,7 @@ const listCrawFunc = () => {
             daytodayPer:$(tr).eq(num).children('td.number').eq(2).children('span').text().trim(),
           };
         }
-        log('크롤링 성공 : 거래순위')
+        log('크롤링 성공 : 거래상위')
       }
       done();
     }
@@ -69,7 +69,7 @@ const listCrawFunc = () => {
 
 //크롤링
 const getStockData = () =>{
-  //거래순위 1~10
+  //거래상위 1~10
   listCrawFunc().queue('https://finance.naver.com/sise/sise_quant.naver')
   //코스피
   kosCrawFunc(totalData.kospiData, 'kospi').queue('https://finance.naver.com/sise/sise_index.naver?code=KOSPI');
