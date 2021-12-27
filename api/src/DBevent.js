@@ -316,6 +316,61 @@ const updateUserNotification = async (phone, app_code, bool) => {
   }
 }
 
+//만료된 사용자 앱토큰 불러오기
+const getExpirationTokens = async (app_code) => {
+  let conn;
+  try {
+    conn = await pool.getConnection();
+    const res = await conn.query(
+      `SELECT app_token FROM user_information WHERE expiration_date < NOW() AND app_code = '${app_code}' AND unsubscribe_flag = 0`
+    );
+    return res;
+  } catch (e) {
+    console.log(e);
+    err('DBevent ERROR : getExpirationTokens');
+    return '400'; // 실패시 400
+  } finally {
+    if (conn) conn.release();
+  }
+}
+
+//앱 코드 리스트 조회
+const getAppCodes = async () => {
+  let conn;
+  try {
+    conn = await pool.getConnection();
+    const res = await conn.query(
+      `SELECT app_code FROM app_list`
+    );
+    return res;
+  } catch (e) {
+    console.log(e);
+    err('DBevent ERROR : getAppCodes');
+    return '400'; // 실패시 400
+  } finally {
+    if (conn) conn.release();
+  }
+}
+
+//사용자 만료일이 지났을시 구독취소 저장
+const updateUnsubscribe = async (arr) => {
+  let conn;
+  const arrStr = arr.join(`', '`)
+  try {
+    conn = await pool.getConnection();
+    const res = await conn.query(
+      `UPDATE user_information SET unsubscribe_flag = 1 WHERE app_token IN ('${arrStr}')`
+    );
+    return res;
+  } catch (e) {
+    console.log(e);
+    err('DBevent ERROR : updateUnsubscribe');
+    return '400'; // 실패시 400
+  } finally {
+    if (conn) conn.release();
+  }
+}
+
 
 module.exports = {
   validAppCheck : validAppCheck,
@@ -332,5 +387,8 @@ module.exports = {
   updateContactAnswer : updateContactAnswer,
   contactList : contactList,
   getAppInformaion : getAppInformaion,
-  notificationList : notificationList
+  notificationList : notificationList,
+  getExpirationTokens : getExpirationTokens,
+  getAppCodes : getAppCodes,
+  updateUnsubscribe : updateUnsubscribe,
 }

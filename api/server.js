@@ -5,6 +5,7 @@ const app = express();
 const server = require('http').createServer(app);
 const io = require('socket.io')(server, { cors: { origin: "*" } });
 const cors = require('cors');
+const schedule = require('node-schedule');
 
 //cors
 app.use(cors());
@@ -359,6 +360,52 @@ app.put('/user/notification', async (req, res) => {
     res.send('403'); //등록된 앱이 아니면 403 반환
   }
 })
+
+//@테스트용 기기 개별 구독취소
+app.post('/test', async (req, res) => {
+  const registrationTokens = [
+    req.body.token,
+  ];
+  admin.messaging().unsubscribeFromTopic(registrationTokens, req.body.appcode)
+  .then((response) => {
+    res('구독취소완료');
+  })
+  .catch((error) => {
+    res('구독취소실패');
+  });
+})
+
+//만료된 사용자 구독취소 처리
+const expirationUserUnsubsctibing = async () =>{
+  let app = await DBevent.getAppCodes()
+  const apps = JSON.parse(JSON.stringify(app));
+
+  for (let key in apps){ // 등록된 앱 목록 만큼 반복
+    let user = await DBevent.getExpirationTokens(apps[key].app_code);
+    const users = JSON.parse(JSON.stringify(user));
+    let arr = [];
+    for (let k in users) {
+      arr[k] = users[k].app_token;
+    }
+    if(arr.length > 0) {
+      admin.messaging().unsubscribeFromTopic(arr, apps[key].app_code)
+      .then( async () => {
+        log(`${apps[key].app_code} 만료된 사용자 구독 취소 성공`);
+        let unsub = await DBevent.updateUnsubscribe(arr);
+        log(unsub);
+      })
+      .catch((error) => {
+        err(`${apps[key].app_code} 만료된 사용자 구독 취소 오류`);
+        console.log(error);
+      });
+    }
+  }
+}
+//매일 00:01분 마다 만료된 사용자 구독취소
+const j = schedule.scheduleJob('1 0 * * *', () => {
+  expirationUserUnsubsctibing();
+})
+
 
 server.listen(4040, ()=>{
   log('API 서버 동작중...');
