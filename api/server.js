@@ -361,25 +361,11 @@ app.put('/user/notification', async (req, res) => {
   }
 })
 
-//@테스트용 기기 개별 구독취소
-app.post('/test', async (req, res) => {
-  const registrationTokens = [
-    req.body.token,
-  ];
-  admin.messaging().unsubscribeFromTopic(registrationTokens, req.body.appcode)
-  .then((response) => {
-    res('구독취소완료');
-  })
-  .catch((error) => {
-    res('구독취소실패');
-  });
-})
-
 //만료된 사용자 구독취소 처리
 const expirationUserUnsubsctibing = async () =>{
   let app = await DBevent.getAppCodes()
   const apps = JSON.parse(JSON.stringify(app));
-
+  log(`만료된 사용자 구독 취소 시작`);
   for (let key in apps){ // 등록된 앱 목록 만큼 반복
     let user = await DBevent.getExpirationTokens(apps[key].app_code);
     const users = JSON.parse(JSON.stringify(user));
