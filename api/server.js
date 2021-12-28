@@ -126,6 +126,32 @@ app.post('/user', async (req, res) => {
   }
 })
 
+//@사용자 정보 갱신 (만료일이 남았을 경우 재인증)
+app.put('/user', async (req, res) => {
+  /* req.body
+  {
+    "name":사용자이름,
+    "phone":사용자전화번호,
+    "app_token":앱토큰
+  }
+ */
+  const app = req.headers.appcode;
+  const key = req.headers.apikey;
+
+  log('put : /user');
+
+  //앱 등록 여부 검사
+  let checkResult = await DBevent.validAppCheck(app, key);
+  if(checkResult === true) {
+    let r = await DBevent.updateUser(req.body, app);
+    res.send(r); 
+    //사용자 정보 등록 후 성공시 true 실패시 400 반환
+  } else {
+    log(`등록되지 않은 앱 : ${app}/${key}`);
+    res.send('403'); //등록된 앱이 아니면 403 반환
+  }
+})
+
 //@전화번호 중복 검사
 app.get('/phone/:number', async (req, res)=>{
   const number = req.params.number;
@@ -139,7 +165,7 @@ app.get('/phone/:number', async (req, res)=>{
   if(checkResult === true) {
     let r = await DBevent.duplicatePhoneNumberCheck(number, app);
     res.send(r); 
-    //전화번호 중복 검사 후 없으면 true 있으면 false, 실패시 400 반환
+    //중복 번호가 없으면 true, 있고 만료 전이면 reauth, 만료 후 면 expiration, 실패시 400 반환
   } else {
     log(`등록되지 않은 앱 : ${app}/${key}`);
     res.send('403'); //등록된 앱이 아니면 403 반환

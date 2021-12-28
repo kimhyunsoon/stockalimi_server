@@ -60,10 +60,19 @@ const duplicatePhoneNumberCheck = async (number, app_code) => {
   try {
     conn = await pool.getConnection();
     const res = await conn.query(
-      `SELECT COUNT(*) as cnt FROM user_information WHERE phone='${number}' AND app_code= '${app_code}'`
+      `SELECT COUNT(*) as cnt, expiration_date FROM user_information WHERE phone='${number}' AND app_code= '${app_code}'`
     );
-    return await res[0].cnt == 0;
-    //전화번호 중복 검사 후 없으면 true 있으면 false 반환
+    if (res[0].cnt == 0) { //중복번호가 없으면 true 반환
+      return true;
+    } else {
+      const now = moment(); 
+      const exp = moment(res[0].expiration_date);
+      if (exp.isAfter(now)) { // 만료일 전이면 'expiration' 반환
+        return 'reauth'
+      } else { // 만료일이 지났으면 'expiration' 반환
+        return 'expiration'
+      }
+    }
   } catch (e) {
     err('DBevent ERROR : duplicatePhoneNumberCheck');
     console.log(e);
@@ -84,6 +93,24 @@ const createUser = async (user, app_code) => {
     return res.affectedRows == 1?true:'400'; //성공시 true
   } catch (e) {
     err('DBevent ERROR : createUser');
+    console.log(e);
+    return '400'; // 실패시 400
+  } finally {
+    if (conn) conn.release();
+  }
+}
+
+//사용자 정보 갱신 (만료일이 남았을 경우 재인증)
+const updateUser = async (user, app_code) => {
+  let conn;
+  try {
+    conn = await pool.getConnection();
+    const res = await conn.query(
+      `UPDATE user_information SET app_token='${user.app_token}', name='${user.name}' WHERE phone='${user.phone}' AND app_code='${app_code}'`
+    );
+    return res.affectedRows == 1?true:'400'; //성공시 true
+  } catch (e) {
+    err('DBevent ERROR : updateUser');
     console.log(e);
     return '400'; // 실패시 400
   } finally {
@@ -149,7 +176,7 @@ const userExpirationCheck = async (phone, app_code) => {
 
       let dDayCnt = 0;
       if(exp.isAfter(now)){
-        remaining_date = expYMD.diff(nowYMD, 'days');
+        dDayCnt = expYMD.diff(nowYMD, 'days');
         //남은일자 계산
       }
       const reData = {
@@ -376,6 +403,7 @@ module.exports = {
   validAppCheck : validAppCheck,
   duplicatePhoneNumberCheck : duplicatePhoneNumberCheck,
   createUser : createUser,
+  updateUser : updateUser,
   userExpirationCheck : userExpirationCheck,
   createNotificationHistory : createNotificationHistory,
   createContactList : createContactList,
