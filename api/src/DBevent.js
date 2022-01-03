@@ -40,9 +40,8 @@ const getAppInformaion = async (app_code) => {
   try {
     conn = await pool.getConnection();
     const res = await conn.query(
-      `SELECT app_name, app_color, default_valid, terms_conditions FROM app_list WHERE app_code='${app_code}'`
+      `SELECT app_name, app_color, default_valid, terms_use_1, terms_use_2, terms_use_3, ad_id, ui_type, sample_notification FROM app_list WHERE app_code='${app_code}'`
     );
-    
     return res.length == 1?res:'400';
     
   } catch (e) {
@@ -307,16 +306,24 @@ const contactList = async (app_code) => {
 }
 
 //알림 기록 조회 (유저 별)
-const notificationList = async (phone, app_code) => {
+const notificationList = async (phone, app_code, num) => {
   let conn;
   try {
     conn = await pool.getConnection();
     const res = await conn.query(
-      `SELECT seq, title, body, push_date FROM notification_history WHERE push_date > (SELECT join_date FROM user_information WHERE phone='${phone}') AND app_code='${app_code}' ORDER BY push_date DESC`
+      `(
+        SELECT seq, title, body, push_date FROM notification_history
+          WHERE push_date > (SELECT join_date FROM user_information WHERE phone='${phone}') AND app_code='stockalimi'
+        )
+        UNION
+        (
+        SELECT seq, title, body, push_date FROM notification_history
+          WHERE push_date < (SELECT join_date FROM user_information WHERE phone='${phone}') AND app_code='stockalimi' ORDER BY push_date DESC LIMIT 0,${num}
+        )`
     );
     return res;
   } catch (e) {
-    err(`DBevent ERROR : notificationList(${phone}, ${app_code})`);
+    err(`DBevent ERROR : notificationList(${phone}, ${app_code}, ${num})`);
     console.log(e);
     return "400"; // 실패시 400
   } finally {

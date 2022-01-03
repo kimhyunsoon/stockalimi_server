@@ -348,17 +348,18 @@ app.get('/app', async (req, res) => {
 })
 
 //@알림 기록 조회 (유저 별)
-app.get('/notification/:phone', async (req, res) => {
+app.get('/notification/:phone/:num', async (req, res) => {
   const app = req.headers.appcode;
   const key = req.headers.apikey;
   const phone = req.params.phone;
+  const num = req.params.num;
 
-  log(`get : /notification/${phone}`);
+  log(`get : /notification/${phone}/${num}`);
 
   //앱 등록 여부 검사
   let checkResult = await DBevent.validAppCheck(app, key);
   if (checkResult === true) {
-    let r = await DBevent.notificationList(phone, app);
+    let r = await DBevent.notificationList(phone, app, num);
     res.send(r); //json 객체 반환
   } else {
     log(`등록되지 않은 앱 : ${app}/${key}`);
