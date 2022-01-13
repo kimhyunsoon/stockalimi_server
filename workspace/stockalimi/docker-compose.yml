@@ -8,8 +8,6 @@ services:
       - backend
   api:
     image: "stockalimi-api:0.2" 
-    volumes:
-      - /home/master/nfs/stockalimi_api/src:/api/src
     networks:
       - backend
   db:
