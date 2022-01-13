@@ -7,7 +7,7 @@ services:
     networks:
       - backend
   api:
-    image: "stockalimi_api:0.2" 
+    image: "stockalimi-api:0.2" 
     volumes:
       - /home/master/nfs/stockalimi_api/src:/api/src
     networks:
