@@ -26,3 +26,5 @@ services:
     
 networks:
   backend:
+    external:
+      name: barun_gateway_backend
