@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "stockalimiapp",
+  "private_key_id": "f41a61a953e6485f8ed92ca9d00084d57f2a6f0a",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCksD8/1CFIt7Wx\nGcUHrYADW9dYvl5duHLxbVkBe5UBlev3IY3pov2si/K+aN5IoM3sEO7EEjj6kIxV\nhXJSQ+6Wwm7fWAHO2u5UirtWVhW6f/Rcfv1UXPXfuBRV6/F4OTPLsB6N08WotdlE\n2X0BoT/DvqAmaBUt4mh0gzfPTlvLFos0jRgVVcVZR4DRvL4B8xPRr+1NNAzYkRFL\n4tirm8kdwCsn0vvM0ypZxRTTL5JZT8y+6w0DzJYUE+jl3Q0sRcOzcerX8LKlA4Dd\nnjE9o7dnhE5ABB6etZUBzBSA6R2/bpFvBifEJ9MIFXCmt+CD3dL+DE6i6yDk2lC2\nFse2r83tAgMBAAECggEAAW5noPu/i4EkbP+RGjuL0NVBzTpXYlghuxF62XJIaFYn\nUd828uOhC1zQ7/UIXHP12WO74ifh/LAFHQFLMjkZpm3WOdcEqhIx43V5EWUNZkpw\nMQAiM47tzMZyJO58pQ00FTOpvaYjv+0KzA2NB70YlhJri4884K7ovsGuHqfxUJ5q\nZsmjRghaLiTK+EZe1nwDkpN//TTkMkeJXz7cyHDvrAv4J4NkgbH6JrKVM8jIq2K8\n6F2mKYmdZPkkz4a/8rn/cVkoF5tcLJJlIuDb5yrcgne3AbluX2Z3FsYaEtP6CnF3\nVdOh78AYpQqQiDxOJJVReLQuQxwqtL65w7YFKdG1/wKBgQDSKRbruvdoWG+Ezhyg\nYsMs7zgE2Nk1CxdR9rCg1V95wMiwxCAfUkQC3qXi245GnGgvZ9A49+TslyZ8mk2a\nwFcpXEcb3A3/UIyqHVX7Hz+IJIgxm/nfYnEfgDPDINR549e1AJRf1pk8tEfgv3Au\no74JN0f7dMKeGUBCtMSkKNElmwKBgQDInBi7ZqCby5gf2doix+4mSyVjEMMluRHt\ni7c3gXFmm62pGLyiumAekByO8kH4YDygVcLH07tvc9iXEVACTkqqwVS9h/mhuf9D\nP7FCd5TEXa/dP6hXCv01cKOrA9ud9fhBNF+E73mVnw3cyrE5ShDAX2lahpW5PDGB\nRr1z2xWXFwKBgFziJiw3bQNkGp2ijspf/A0PCT4zLQShi0QBeJ0M0O65wrlFZUES\nldaC2uRBz0br96wEAOY8waPDRhJKDER5/8va6d6pSlJuIk1JO+gKLoUYSE1Mt4oA\nMykN+1KhXuckSQDJacpVyVIoB6CQW59xZRsjoJ/FQgKn/Fu/Ey3OkGlDAoGAYvjI\nJuS6BkMK2WP0f8Zdkxzt5BMoBBtrYePVT5gYJ4RUyCFBJ5OFym5U+J1CuNRZ9Mx6\n3XVzesgPqnBLJegUZGwfb6Z/HTATZM0umdk/VyXVlvVKCy+LvurEhKHRnvv0L88z\n9PTk6lFfWHfTuaz12ML5ykSt54Zv8hTBcUA8RZ8CgYA6oXhL69kxzYLzAnad0YyV\ntizT6LdNcc4tjn7WYuZ48cqCVaq9sXvhCbpufk+r7QJ7XbVRd8DXgPHFIEthnWKU\nidN1wJUPOQw9X6MGqvA9y2mjaAiniz+oDXvKW7Q9uAmgoU4HVEJVi4KKJKWampHm\nfgHV2M0hqDYeV4U0K1wb0g==\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-kq2xr@stockalimiapp.iam.gserviceaccount.com",
+  "client_id": "105132397339941917783",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-kq2xr%40stockalimiapp.iam.gserviceaccount.com"
+}
+
