@@ -30,7 +30,7 @@ selenium-debug.log
 db.env
 /data
 .docker
-api/src/firebase
-api/server.log
-api/src/DBinfo.js
+workspace/stockalimi/api/src/firebase/
+server.log
+workspace/stockalimi/api/src/DBinfo.js
 .vim/
