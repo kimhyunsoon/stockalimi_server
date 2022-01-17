@@ -10,20 +10,6 @@ services:
     image: "stockalimi-api:0.2" 
     networks:
       - backend
-  db:
-    image: "mariadb:10.4"
-    ports:
-      - "3306:3306"
-    env_file:
-      - /home/master/nfs/stockalimi_db/db.env
-    volumes:
-      - /home/master/nfs/stockalimi_data:/var/lib/mysql
-      - /home/master/nfs/stockalimi_db/custom.conf:/etc/mysql/conf.d/custom.cnf
-    environment: 
-    - TZ=Asia/Seoul
-    networks:
-      - backend
-    
 networks:
   backend:
     external:
