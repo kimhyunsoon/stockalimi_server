@@ -55,7 +55,7 @@ app.put('/notification', async (req, res) =>{
       })
       .catch(err =>{
         err(`FCM ERROR`);
-        console.log(err);
+        console.log(e);
         res.send(`FCM ERROR`);
       })
   
@@ -407,9 +407,9 @@ const expirationUserUnsubsctibing = async () =>{
         let unsub = await DBevent.updateUnsubscribe(arr);
         log(unsub);
       })
-      .catch((error) => {
+      .catch((e) => {
         err(`${apps[key].app_code} 만료된 사용자 구독 취소 오류`);
-        console.log(error);
+        console.log(e);
       });
     }
   }
