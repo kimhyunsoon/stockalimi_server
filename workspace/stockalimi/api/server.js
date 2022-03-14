@@ -52,7 +52,7 @@ app.put('/notification', async (req, res) =>{
       },
       condition: topicString 
     }
-    firebaseArr[key].messaging().send(msg)
+    firebaseArr[app].messaging().send(msg)
       .then(result => {
         log(`FCM SUCCESS`);
         res.send(`FCM SUCCESS`);
@@ -406,7 +406,7 @@ const expirationUserUnsubsctibing = async () =>{
       arr[k] = users[k].app_token;
     }
     if(arr.length > 0) {
-      firebaseArr[key].messaging().unsubscribeFromTopic(arr, apps[key].app_code)
+      firebaseArr[apps[key].app_code].messaging().unsubscribeFromTopic(arr, apps[key].app_code)
       .then( async () => {
         log(`${apps[key].app_code} 만료된 사용자 구독 취소 성공`);
         let unsub = await DBevent.updateUnsubscribe(arr);
