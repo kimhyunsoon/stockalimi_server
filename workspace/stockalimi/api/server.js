@@ -23,9 +23,6 @@ const CrowlingEvent = require('./src/CrowlingEvent.js')
 //firebase
 const admin = require('firebase-admin');
 const serAccount = require('./src/firebase/stockalimi.json');
-admin.initializeApp({
-  credential: admin.credential.cert(serAccount),
-})
 
 //@푸쉬알림 발송
 app.put('/notification', async (req, res) =>{
@@ -48,6 +45,9 @@ app.put('/notification', async (req, res) =>{
       },
       condition: topicString 
     }
+    admin.initializeApp({
+      credential: admin.credential.cert(serAccount[app]),
+    });
     admin.messaging().send(msg)
       .then(result => {
         log(`FCM SUCCESS`);
@@ -390,9 +390,10 @@ app.put('/user/notification', async (req, res) => {
 
 //만료된 사용자 구독취소 처리
 const expirationUserUnsubsctibing = async () =>{
-  let app = await DBevent.getAppCodes()
+  let app = await DBevent.getAppCodes();
   const apps = JSON.parse(JSON.stringify(app));
   log(`만료된 사용자 구독 취소 시작`);
+  
   for (let key in apps){ // 등록된 앱 목록 만큼 반복
     let user = await DBevent.getExpirationTokens(apps[key].app_code);
     const users = JSON.parse(JSON.stringify(user));
@@ -401,6 +402,9 @@ const expirationUserUnsubsctibing = async () =>{
       arr[k] = users[k].app_token;
     }
     if(arr.length > 0) {
+      admin.initializeApp({
+        credential: admin.credential.cert(serAccount[apps[key].app_code]),
+      });
       admin.messaging().unsubscribeFromTopic(arr, apps[key].app_code)
       .then( async () => {
         log(`${apps[key].app_code} 만료된 사용자 구독 취소 성공`);
@@ -414,11 +418,16 @@ const expirationUserUnsubsctibing = async () =>{
     }
   }
 }
+
+//만료된 사용자 구독취소처리 테스트용 api
+app.put('/test/isYKdeYPanTZc619tORFeRxAedtxoeRQ9cBu5qRC2BhZbdRj7PcyhfWhC4TM', async (req, res) => {
+  expirationUserUnsubsctibing();
+});
+
 //매일 00:01분 마다 만료된 사용자 구독취소
 const j = schedule.scheduleJob('1 0 * * *', () => {
   expirationUserUnsubsctibing();
 })
-
 
 server.listen(4040, ()=>{
   log('API 서버 동작중...');
