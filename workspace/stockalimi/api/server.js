@@ -23,6 +23,13 @@ const CrowlingEvent = require('./src/CrowlingEvent.js')
 //firebase
 const admin = require('firebase-admin');
 const serAccount = require('./src/firebase/stockalimi.json');
+let firebaseArr = {};
+for (let key in serAccount){
+  firebaseArr[key] = admin.initializeApp({
+    credential: admin.credential.cert(serAccount[key]),
+  }, key);
+}
+
 
 //@푸쉬알림 발송
 app.put('/notification', async (req, res) =>{
@@ -45,10 +52,7 @@ app.put('/notification', async (req, res) =>{
       },
       condition: topicString 
     }
-    const firebaseOtherApp = admin.initializeApp({
-      credential: admin.credential.cert(serAccount[app]),
-    }, app);
-    firebaseOtherApp.messaging().send(msg)
+    firebaseArr[key].messaging().send(msg)
       .then(result => {
         log(`FCM SUCCESS`);
         res.send(`FCM SUCCESS`);
@@ -402,10 +406,7 @@ const expirationUserUnsubsctibing = async () =>{
       arr[k] = users[k].app_token;
     }
     if(arr.length > 0) {
-      const firebaseOtherApp = admin.initializeApp({
-        credential: admin.credential.cert(serAccount[app]),
-      }, app);
-      firebaseOtherApp.messaging().unsubscribeFromTopic(arr, apps[key].app_code)
+      firebaseArr[key].messaging().unsubscribeFromTopic(arr, apps[key].app_code)
       .then( async () => {
         log(`${apps[key].app_code} 만료된 사용자 구독 취소 성공`);
         let unsub = await DBevent.updateUnsubscribe(arr);
