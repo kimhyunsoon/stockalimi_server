@@ -45,10 +45,10 @@ app.put('/notification', async (req, res) =>{
       },
       condition: topicString 
     }
-    admin.initializeApp({
-      credential: admin.credential.cert(serAccount[app]),
+    const firebaseOtherApp = admin.initializeApp({
+      credential: admin.credential.cert(serAccount[app], app),
     });
-    admin.messaging().send(msg)
+    firebaseOtherApp.messaging().send(msg)
       .then(result => {
         log(`FCM SUCCESS`);
         res.send(`FCM SUCCESS`);
@@ -402,10 +402,10 @@ const expirationUserUnsubsctibing = async () =>{
       arr[k] = users[k].app_token;
     }
     if(arr.length > 0) {
-      admin.initializeApp({
-        credential: admin.credential.cert(serAccount[apps[key].app_code]),
+      const firebaseOtherApp = admin.initializeApp({
+        credential: admin.credential.cert(serAccount[app], app),
       });
-      admin.messaging().unsubscribeFromTopic(arr, apps[key].app_code)
+      firebaseOtherApp.messaging().unsubscribeFromTopic(arr, apps[key].app_code)
       .then( async () => {
         log(`${apps[key].app_code} 만료된 사용자 구독 취소 성공`);
         let unsub = await DBevent.updateUnsubscribe(arr);
