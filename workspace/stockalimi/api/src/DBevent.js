@@ -313,12 +313,12 @@ const notificationList = async (phone, app_code, num) => {
     const res = await conn.query(
       `(
         SELECT seq, title, body, push_date FROM notification_history
-          WHERE push_date > (SELECT join_date FROM user_information WHERE phone='${phone}') AND app_code='${app_code}'
+          WHERE push_date > (SELECT join_date FROM user_information WHERE phone='${phone}' AND app_code='${app_code}') AND app_code='${app_code}'
         )
         UNION
         (
         SELECT seq, title, body, push_date FROM notification_history
-          WHERE push_date < (SELECT join_date FROM user_information WHERE phone='${phone}') AND app_code='${app_code}' ORDER BY push_date DESC LIMIT 0,${num}
+          WHERE push_date < (SELECT join_date FROM user_information WHERE phone='${phone}' AND app_code='${app_code}') AND app_code='${app_code}' ORDER BY push_date DESC LIMIT 0,${num}
         ) ORDER BY push_date DESC`
     );
     return res;
