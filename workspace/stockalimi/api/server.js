@@ -23,7 +23,9 @@ const CrowlingEvent = require('./src/CrowlingEvent.js')
 //firebase
 const admin = require('firebase-admin');
 const serAccount = require('./src/firebase/stockalimi.json');
-
+admin.initializeApp({
+  credential: admin.credential.cert(serAccount['stockalimi']),
+});
 //@푸쉬알림 발송
 app.put('/notification', async (req, res) =>{
   const title = req.body.title;
