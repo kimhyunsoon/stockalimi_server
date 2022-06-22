@@ -1,1 +1,1 @@
-docker stack deploy -c docker-compose.yml stockalimi-api
+docker stack deploy -c docker-compose.yml stockalimi
