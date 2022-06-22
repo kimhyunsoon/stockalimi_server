@@ -1,0 +1,1 @@
+docker build -t stockalimi-api:latest api
