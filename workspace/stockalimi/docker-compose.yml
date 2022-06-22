@@ -7,7 +7,7 @@ services:
     networks:
       - backend
   api:
-    image: "stockalimi-api:0.2" 
+    image: "stockalimi-api:latest" 
     networks:
       - backend
 networks:
