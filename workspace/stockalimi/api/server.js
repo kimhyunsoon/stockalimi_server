@@ -57,7 +57,7 @@ app.put('/notification', async (req, res) =>{
         log(`FCM SUCCESS`);
         res.send(`FCM SUCCESS`);
       })
-      .catch(err =>{
+      .catch(e =>{
         err(`FCM ERROR`);
         console.log(e);
         res.send(`FCM ERROR`);
